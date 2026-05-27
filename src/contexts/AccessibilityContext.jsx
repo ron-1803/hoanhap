@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useReducer, useCallback, useState } from "react";
+import { createContext, useContext, useEffect, useReducer, useCallback, useState, useRef } from "react";
+
+const TTS_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/tts";
 
 /* ═══════════════════════════════════════════════════════════════════
    AccessibilityContext
@@ -104,22 +106,9 @@ const AccessibilityContext = createContext(null);
 export function AccessibilityProvider({ children }) {
   const [state, dispatch] = useReducer(accessibilityReducer, null, loadPersistedState);
   
-  // Voices state to hold loaded browser voices
-  const [voices, setVoices] = useState([]);
-
-  // ── Load voices asynchronously on mount ──
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.speechSynthesis) {
-      const loadVoices = () => {
-        setVoices(window.speechSynthesis.getVoices());
-      };
-      
-      loadVoices();
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = loadVoices;
-      }
-    }
-  }, []);
+  // Audio refs to manage local Piper TTS streams
+  const currentAudioRef = useRef(null);
+  const currentObjectURLRef = useRef(null);
 
   // ── Persist state to localStorage on every change ──
   useEffect(() => {
@@ -163,8 +152,13 @@ export function AccessibilityProvider({ children }) {
 
   // ── Stop speaking ──
   const stopSpeaking = useCallback(() => {
-    if (typeof window !== "undefined" && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    if (currentObjectURLRef.current) {
+      URL.revokeObjectURL(currentObjectURLRef.current);
+      currentObjectURLRef.current = null;
     }
   }, []);
 
@@ -175,48 +169,56 @@ export function AccessibilityProvider({ children }) {
     }
   }, [state.screenReader, stopSpeaking]);
 
-  // ── Voice Selection Helper ──
-  const getVietnameseVoice = useCallback(() => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return null;
-    const voicesList = window.speechSynthesis.getVoices();
-    
-    // 1. Google vi-VN (Google Tiếng Việt on Chrome/Android)
-    let voice = voicesList.find(
-      (v) => (v.lang === "vi-VN" || v.lang === "vi_VN") && v.name.toLowerCase().includes("google")
-    );
-    
-    // 2. Any native vi-VN (Microsoft An on Windows, Linh/Mai on macOS/iOS)
-    if (!voice) {
-      voice = voicesList.find((v) => v.lang === "vi-VN" || v.lang === "vi_VN");
-    }
-    
-    return voice || null;
-  }, []);
-
   // ── TTS: speakText(text) ──────────────────────────────────────
-  // Uses the browser's native Web Speech API (SpeechSynthesis).
-  // Ensures clean narration by cancelling active speech before speaking.
+  // Fetches audio Blob from local Piper TTS backend.
+  // Performs dynamic resource cleanup & handles audio interruption.
   const speakText = useCallback(
-    (text) => {
-      if (!text || typeof window === "undefined" || !window.speechSynthesis) return;
+    async (text) => {
+      if (!text || typeof window === "undefined") return;
 
-      // Interrupt any current speech
-      window.speechSynthesis.cancel();
+      // 1. Interrupt active speech and clear references
+      stopSpeaking();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "vi-VN";
-      
-      const voice = getVietnameseVoice();
-      if (voice) {
-        utterance.voice = voice;
+      try {
+        // 2. Query self-hosted Piper TTS API
+        const response = await fetch(TTS_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Mã phản hồi lỗi HTTP: ${response.status}`);
+        }
+
+        const blobData = await response.blob();
+
+        // 3. Create object URL for audio stream
+        const audioUrl = URL.createObjectURL(blobData);
+        currentObjectURLRef.current = audioUrl;
+
+        // 4. Play new audio
+        const audio = new Audio(audioUrl);
+        currentAudioRef.current = audio;
+
+        audio.onended = () => {
+          if (currentObjectURLRef.current === audioUrl) {
+            URL.revokeObjectURL(audioUrl);
+            currentObjectURLRef.current = null;
+          }
+          if (currentAudioRef.current === audio) {
+            currentAudioRef.current = null;
+          }
+        };
+
+        await audio.play();
+      } catch (error) {
+        console.error("[Lỗi Piper TTS]: Không thể kết nối tới server hoặc file âm thanh bị lỗi", error);
       }
-
-      utterance.rate = 0.9; // Slightly slower for clarity
-      utterance.pitch = 1.0;
-
-      window.speechSynthesis.speak(utterance);
     },
-    [getVietnameseVoice]
+    [stopSpeaking]
   );
 
   // ── Dispatch helpers ──────────────────────────────────────────
