@@ -152,6 +152,7 @@ export function AccessibilityProvider({ children }) {
 
   // ── Stop speaking ──
   const stopSpeaking = useCallback(() => {
+    // 1. Clear Piper TTS Audio ref
     if (currentAudioRef.current) {
       currentAudioRef.current.pause();
       currentAudioRef.current = null;
@@ -159,6 +160,10 @@ export function AccessibilityProvider({ children }) {
     if (currentObjectURLRef.current) {
       URL.revokeObjectURL(currentObjectURLRef.current);
       currentObjectURLRef.current = null;
+    }
+    // 2. Clear native browser speech synthesis
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
     }
   }, []);
 
@@ -171,7 +176,7 @@ export function AccessibilityProvider({ children }) {
 
   // ── TTS: speakText(text) ──────────────────────────────────────
   // Fetches audio Blob from local Piper TTS backend.
-  // Performs dynamic resource cleanup & handles audio interruption.
+  // Falls back to native browser SpeechSynthesis if the API fails or is offline.
   const speakText = useCallback(
     async (text) => {
       if (!text || typeof window === "undefined") return;
@@ -215,7 +220,34 @@ export function AccessibilityProvider({ children }) {
 
         await audio.play();
       } catch (error) {
-        console.error("[Lỗi Piper TTS]: Không thể kết nối tới server hoặc file âm thanh bị lỗi", error);
+        console.warn("[Lỗi Piper TTS]: Không thể kết nối tới server hoặc file âm thanh bị lỗi. Đang chuyển sang Web Speech API dự phòng.", error);
+
+        // ── Native Web Speech API Fallback ──
+        try {
+          if (window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "vi-VN";
+
+            // Find best available Vietnamese voice
+            const voicesList = window.speechSynthesis.getVoices();
+            let voice = voicesList.find(
+              (v) => (v.lang === "vi-VN" || v.lang === "vi_VN") && v.name.toLowerCase().includes("google")
+            );
+            if (!voice) {
+              voice = voicesList.find((v) => v.lang === "vi-VN" || v.lang === "vi_VN");
+            }
+            if (voice) {
+              utterance.voice = voice;
+            }
+
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+
+            window.speechSynthesis.speak(utterance);
+          }
+        } catch (fallbackError) {
+          console.error("[Lỗi Web Speech Fallback]: Không thể phát giọng nói mặc định của trình duyệt", fallbackError);
+        }
       }
     },
     [stopSpeaking]
