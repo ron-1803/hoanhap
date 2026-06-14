@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAccessibility } from "../contexts/AccessibilityContext";
 import Icon from "../components/ui/Icon";
 import Button from "../components/ui/Button";
@@ -257,13 +258,20 @@ function FocusTrapModal({ isOpen, onClose, title, children }) {
 
 export default function RightsPage() {
   const { state: accessState, speakText } = useAccessibility();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Filters State
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("search") || "");
   const [selectedDisability, setSelectedDisability] = useState("Tất cả");
   const [selectedAge, setSelectedAge] = useState("Tất cả");
   const [selectedProvince, setSelectedProvince] = useState("Tất cả");
   const [selectedBentoCategory, setSelectedBentoCategory] = useState("Tất cả");
+
+  // Sync searchQuery when searchParams in URL change
+  useEffect(() => {
+    const q = searchParams.get("search") || "";
+    setSearchQuery(q);
+  }, [searchParams]);
 
   // Saved Bookmarks state
   const [savedRights, setSavedRights] = useState([]);

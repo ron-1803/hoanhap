@@ -10,6 +10,10 @@ import ProfilePage from "./pages/ProfilePage";
 import ConnectionPage from "./pages/ConnectionPage";
 import SupportMapPage from "./pages/MapPage";
 import RightsPage from "./pages/RightsPage";
+import ContactPage from "./pages/ContactPage";
+import AboutPage from "./pages/AboutPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 /**
  * App — Root application component
@@ -43,6 +47,12 @@ export default function App() {
               <Route path="/quyen-loi" element={<RightsPage />} />
               <Route path="/ket-noi" element={<ConnectionPage />} />
               <Route path="/ban-do" element={<SupportMapPage />} />
+
+              {/* ── Additional Completed Pages ── */}
+              <Route path="/lien-he" element={<ContactPage />} />
+              <Route path="/ve-chung-toi" element={<AboutPage />} />
+              <Route path="/dieu-khoan" element={<TermsPage />} />
+              <Route path="/bao-mat" element={<PrivacyPage />} />
 
               {/* ── Phase 5: Admin ── */}
               {/* <Route path="/admin/*" element={<AdminDashboard />} /> */}

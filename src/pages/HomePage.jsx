@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAccessibility } from "../contexts/AccessibilityContext";
 import SearchBar from "../components/ui/SearchBar";
 import ServiceCard from "../components/ui/ServiceCard";
@@ -61,16 +62,16 @@ const SERVICES = [
 
 export default function HomePage() {
   const { state, speakText } = useAccessibility();
+  const navigate = useNavigate();
 
   const handleSearch = useCallback(
     (query) => {
-      // Phase 3 will implement actual search logic
-      console.log("Search query:", query);
       if (state.screenReader) {
         speakText(`Đang tìm kiếm kết quả cho: ${query}`);
       }
+      navigate(`/quyen-loi?search=${encodeURIComponent(query)}`);
     },
-    [state.screenReader, speakText]
+    [state.screenReader, speakText, navigate]
   );
 
   return (
