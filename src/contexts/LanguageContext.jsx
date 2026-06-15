@@ -36,6 +36,23 @@ const translations = {
     footer_built_with: "Xây dựng với",
     footer_built_for: "cho cộng đồng NKT Việt Nam",
 
+    // Accessibility Sidebar
+    sidebar_read: "Đọc",
+    sidebar_read_desc: "Đọc nội dung bằng giọng nói tích hợp. Nếu bạn đang sử dụng trình đọc màn hình như NVDA hoặc Narrator, vui lòng tắt tính năng này để tránh trùng lặp giọng nói.",
+    sidebar_increase: "Tăng chữ",
+    sidebar_increase_desc: "Tăng cỡ chữ hiển thị",
+    sidebar_decrease: "Giảm chữ",
+    sidebar_decrease_desc: "Giảm cỡ chữ hiển thị",
+    sidebar_contrast: "Tương phản",
+    sidebar_contrast_desc: "Chế độ tương phản cao đặc biệt",
+    sidebar_dark: "Chế độ tối",
+    sidebar_dark_desc: "Chuyển sang giao diện tối",
+    sidebar_keyboard: "Điều hướng",
+    sidebar_keyboard_desc: "Kích hoạt điều hướng bàn phím nâng cao",
+    sidebar_sos: "SOS",
+    sidebar_sos_desc: "SOS Khẩn cấp — Liên hệ đường dây nóng",
+    font_scale_current: "Cỡ chữ hiện tại",
+
     // HomePage
     home_hero_badge: "Cổng thông tin hỗ trợ NKT hàng đầu Việt Nam",
     home_hero_title: "Hòa nhập và Phát triển cùng cộng đồng",
@@ -129,6 +146,23 @@ const translations = {
     footer_desc: "Access portal for services, national policy updates, and inclusive employment opportunities for people with disabilities in Vietnam.",
     footer_built_with: "Built with",
     footer_built_for: "for the Vietnamese PWD community",
+
+    // Accessibility Sidebar
+    sidebar_read: "Read",
+    sidebar_read_desc: "Read page content via built-in voice assistance. If you are already using a screen reader like NVDA or Narrator, please disable this to avoid duplicate voices.",
+    sidebar_increase: "A+",
+    sidebar_increase_desc: "Increase display font size",
+    sidebar_decrease: "A-",
+    sidebar_decrease_desc: "Decrease display font size",
+    sidebar_contrast: "Contrast",
+    sidebar_contrast_desc: "Special high contrast mode",
+    sidebar_dark: "Dark UI",
+    sidebar_dark_desc: "Switch to dark theme mode",
+    sidebar_keyboard: "Navigate",
+    sidebar_keyboard_desc: "Activate enhanced keyboard navigation markers",
+    sidebar_sos: "SOS",
+    sidebar_sos_desc: "Emergency SOS — Contact hotline",
+    font_scale_current: "Current text size",
 
     // HomePage
     home_hero_badge: "Vietnam's Leading Support Portal for PWDs",

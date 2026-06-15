@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAccessibility } from "../../contexts/AccessibilityContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import Icon from "../ui/Icon";
 import SOSModal from "./SOSModal";
 
@@ -29,6 +30,7 @@ export default function AccessibilitySidebar() {
     toggleScreenReader,
     toggleKeyboardNav,
   } = useAccessibility();
+  const { t, language } = useLanguage();
 
   const [sosModalOpen, setSosModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -60,7 +62,7 @@ export default function AccessibilitySidebar() {
   return (
     <>
       <aside
-        aria-label="Thanh công cụ trợ năng"
+        aria-label={language === "en" ? "Accessibility Toolbar" : "Thanh công cụ trợ năng"}
         className="accessibility-sidebar fixed left-0 top-0 h-full w-sidebar-width z-50
                    bg-surface-container-lowest dark:bg-[#111318]
                    border-r border-outline-variant/30 dark:border-white/5
@@ -71,7 +73,7 @@ export default function AccessibilitySidebar() {
         {/* Tool 1: Read Content (TTS) */}
         <button
           onClick={toggleScreenReader}
-          aria-label="Đọc nội dung"
+          aria-label={t("sidebar_read_desc")}
           aria-pressed={state.screenReader}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
             state.screenReader ? activeClasses : inactiveClasses
@@ -83,16 +85,14 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Đọc
-            <br />
-            nội dung
+            {t("sidebar_read")}
           </span>
         </button>
 
         {/* Tool 2: Increase Font Size */}
         <button
           onClick={increaseFontScale}
-          aria-label={`Tăng cỡ chữ. Cỡ chữ hiện tại: ${Math.round(state.fontScale * 100)}%`}
+          aria-label={`${t("sidebar_increase_desc")}. ${t("font_scale_current")}: ${Math.round(state.fontScale * 100)}%`}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${inactiveClasses}`}
           disabled={state.fontScale >= 2.0}
         >
@@ -102,16 +102,14 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Tăng
-            <br />
-            chữ
+            {t("sidebar_increase")}
           </span>
         </button>
 
         {/* Tool 3: Decrease Font Size */}
         <button
           onClick={decreaseFontScale}
-          aria-label={`Giảm cỡ chữ. Cỡ chữ hiện tại: ${Math.round(state.fontScale * 100)}%`}
+          aria-label={`${t("sidebar_decrease_desc")}. ${t("font_scale_current")}: ${Math.round(state.fontScale * 100)}%`}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${inactiveClasses}`}
           disabled={state.fontScale <= 0.8}
         >
@@ -121,16 +119,14 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Giảm
-            <br />
-            chữ
+            {t("sidebar_decrease")}
           </span>
         </button>
 
         {/* Tool 4: High Contrast */}
         <button
           onClick={toggleHighContrast}
-          aria-label="Tương phản cao"
+          aria-label={t("sidebar_contrast_desc")}
           aria-pressed={state.highContrast}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
             state.highContrast ? activeClasses : inactiveClasses
@@ -142,16 +138,14 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Tương
-            <br />
-            phản
+            {t("sidebar_contrast")}
           </span>
         </button>
 
         {/* Tool 5: Dark Mode */}
         <button
           onClick={toggleDarkMode}
-          aria-label="Chế độ tối"
+          aria-label={t("sidebar_dark_desc")}
           aria-pressed={state.darkMode}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
             state.darkMode ? activeClasses : inactiveClasses
@@ -163,16 +157,14 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Giao
-            <br />
-            diện tối
+            {t("sidebar_dark")}
           </span>
         </button>
 
         {/* Tool 6: Keyboard Navigation */}
         <button
           onClick={toggleKeyboardNav}
-          aria-label="Điều hướng bằng bàn phím"
+          aria-label={t("sidebar_keyboard_desc")}
           aria-pressed={state.keyboardNav}
           className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
             state.keyboardNav ? activeClasses : inactiveClasses
@@ -184,9 +176,7 @@ export default function AccessibilitySidebar() {
             className="group-hover:scale-110 transition-transform"
           />
           <span className="icon-label">
-            Điều
-            <br />
-            hướng
+            {t("sidebar_keyboard")}
           </span>
         </button>
 
@@ -196,7 +186,7 @@ export default function AccessibilitySidebar() {
         {/* Tool 7: SOS Emergency (pinned to bottom) */}
         <button
           onClick={handleSOS}
-          aria-label="SOS Khẩn cấp — Liên hệ đường dây nóng"
+          aria-label={t("sidebar_sos_desc")}
           className="sidebar-tool-btn group
                      bg-gradient-to-b from-red-600 to-red-700
                      text-white
@@ -209,7 +199,7 @@ export default function AccessibilitySidebar() {
             size="text-2xl"
             className="font-bold group-hover:scale-110 transition-transform"
           />
-          <span className="icon-label font-bold">SOS</span>
+          <span className="icon-label font-bold">{t("sidebar_sos")}</span>
         </button>
       </aside>
 
