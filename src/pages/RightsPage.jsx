@@ -53,13 +53,13 @@ const LEGAL_DOCUMENTS = [
     id: "doc-1",
     title: "Luật Người khuyết tật số 51/2010/QH12",
     date: "Ban hành ngày 17/06/2010",
-    url: "#",
+    url: "/documents/luat_nguoi_khuyet_tat_51_2010.pdf",
   },
   {
     id: "doc-2",
     title: "Nghị định 20/2021/NĐ-CP",
     date: "Quy định chính sách trợ giúp xã hội đối với đối tượng bảo trợ xã hội",
-    url: "#",
+    url: "/documents/nghi_dinh_20_2021_nd_cp.pdf",
   },
 ];
 
@@ -645,6 +645,9 @@ export default function RightsPage() {
                 </div>
                 
                 <Button
+                  as="a"
+                  href={doc.url}
+                  download
                   variant="secondary"
                   onClick={() => handleDownloadPDF(doc.title)}
                   icon="download"
