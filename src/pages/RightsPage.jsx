@@ -53,7 +53,7 @@ const LEGAL_DOCUMENTS = [
     id: "doc-1",
     title: "Luật Người khuyết tật số 51/2010/QH12",
     date: "Ban hành ngày 17/06/2010",
-    url: "/documents/luat_nguoi_khuyet_tat_51_2010.pdf",
+    url: "/documents/100699_l51qh.doc",
   },
   {
     id: "doc-2",
@@ -653,7 +653,7 @@ export default function RightsPage() {
                   icon="download"
                   className="font-bold text-xs shrink-0 self-start sm:self-center border-2"
                 >
-                  Tải PDF
+                  {doc.url.endsWith(".doc") ? "Tải DOC" : "Tải PDF"}
                 </Button>
               </li>
             ))}
