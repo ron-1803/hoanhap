@@ -45,6 +45,14 @@ Bạn có thể đăng nhập bằng các tài khoản kiểm thử được cà
 - **Quản lý mức chuẩn trợ cấp:** Nhập mức chuẩn mới (ví dụ nâng từ `360,000` lên `500,000` đ) và nhấn Cập nhật. Mức này sẽ tự động thay đổi hệ số tính toán của tất cả người dùng trên trang `/tro-cap` ngay lập tức.
 - **Quản lý người dùng:** Danh sách người dùng với chức năng Khóa hoặc Mở khóa tài khoản (Active/Suspended).
 
+### 5. Phân hệ Góp ý & Phản hồi (`/gop-y`)
+- **Bố cục mới:** Giao diện được thiết kế dạng căn giữa (centered layout) đẹp mắt và gọn gàng, loại bỏ hoàn toàn các thông tin liên lạc không chính xác trước đây.
+- **Biểu mẫu gửi góp ý:** Người dùng nhập Họ và tên, Email/Số điện thoại, chọn Chủ đề góp ý (Góp ý website, Báo cáo lỗi, Đóng góp nội dung, v.v.), Tiêu đề và Nội dung chi tiết.
+- **Báo cáo rào cản tiếp cận:** Checkbox tích chọn báo cáo lỗi hiển thị/đọc/điều hướng để hệ thống ghi nhận.
+- **Cập nhật Chatbot & SOS:** 
+  - Đã xóa số điện thoại hỗ trợ NKT `1800 599 920` cũ trong chatbot và menu khẩn cấp SOS để đảm bảo tính chính xác của thông tin.
+  - Chatbot hỗ trợ chuyển hướng sang trang `/gop-y` với nhãn dịch vụ tương ứng.
+
 ---
 
 ## ♿ Các Tiêu chuẩn Tiếp cận Web (WCAG 2.2 Compliance)
