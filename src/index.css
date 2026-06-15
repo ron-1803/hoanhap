@@ -84,38 +84,85 @@ html.high-contrast body {
   color: #ffffff !important;
 }
 
-/* Force all container boxes, cards, headers, and sidebars to solid black */
+/* Force all container boxes, cards, headers, sidebars, forms, lists to solid black with white border */
 html.high-contrast header,
 html.high-contrast main,
 html.high-contrast aside,
 html.high-contrast footer,
 html.high-contrast div,
 html.high-contrast section,
-html.high-contrast article {
+html.high-contrast article,
+html.high-contrast nav,
+html.high-contrast form,
+html.high-contrast ul,
+html.high-contrast li,
+html.high-contrast table,
+html.high-contrast tr,
+html.high-contrast th,
+html.high-contrast td {
   background-color: #000000 !important;
+  background-image: none !important;
   border-color: #ffffff !important;
+  box-shadow: none !important;
 }
 
-/* Force all text, titles, descriptions, and labels to either neon yellow or white */
+/* Force all text, titles, descriptions, labels, icons and buttons to white text */
 html.high-contrast h1,
 html.high-contrast h2,
 html.high-contrast h3,
 html.high-contrast h4,
+html.high-contrast h5,
+html.high-contrast h6,
 html.high-contrast p,
 html.high-contrast span,
 html.high-contrast label,
-html.high-contrast a {
+html.high-contrast a,
+html.high-contrast button,
+html.high-contrast i,
+html.high-contrast legend,
+html.high-contrast th,
+html.high-contrast td,
+html.high-contrast li {
   color: #ffffff !important;
+  text-shadow: none !important;
 }
 
-/* Distinguish prominent active interactive elements/buttons/sidebar icons with bright yellow */
-html.high-contrast .active,
-html.high-contrast [aria-current="page"],
-html.high-contrast [aria-pressed="true"],
+/* Force buttons to have black background and white border */
+html.high-contrast button,
+html.high-contrast a.btn,
+html.high-contrast .button {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Hover and focus states for links and buttons - neon yellow */
+html.high-contrast button:hover,
+html.high-contrast a:hover,
+html.high-contrast button:focus,
+html.high-contrast a:focus,
 html.high-contrast button:focus-visible,
 html.high-contrast a:focus-visible {
   color: #ffff00 !important;
-  outline: 4px solid #ffff00 !important;
+  border-color: #ffff00 !important;
+  outline: 3px solid #ffff00 !important;
+}
+
+/* Distinguish prominent active/pressed interactive elements/buttons/sidebar icons with bright yellow */
+html.high-contrast .active,
+html.high-contrast [aria-current="page"],
+html.high-contrast [aria-pressed="true"],
+html.high-contrast .active h1,
+html.high-contrast .active h2,
+html.high-contrast .active h3,
+html.high-contrast .active p,
+html.high-contrast .active span,
+html.high-contrast [aria-pressed="true"] span,
+html.high-contrast [aria-pressed="true"] i {
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
 }
 
 /* Input elements styling in high-contrast */
@@ -125,6 +172,20 @@ html.high-contrast textarea {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
+}
+
+html.high-contrast input:focus,
+html.high-contrast select:focus,
+html.high-contrast textarea:focus {
+  border-color: #ffff00 !important;
+  outline: 2px solid #ffff00 !important;
+}
+
+/* Ensure SVG icons or material icons inherit correct high contrast colors */
+html.high-contrast svg,
+html.high-contrast svg path {
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 /* ═══════════════════════════════════════════════════
