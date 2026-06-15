@@ -55,6 +55,8 @@ const translations = {
     service_connection_desc: "Kết nối bạn với các cộng đồng và cá nhân sẵn lòng hỗ trợ, chia sẻ cùng người khuyết tật trên toàn quốc.",
     service_map_title: "Bản đồ hỗ trợ",
     service_map_desc: "Tìm kiếm cơ sở y tế, trung tâm phục hồi chức năng và địa điểm tiếp cận dành cho NKT gần bạn nhất.",
+    service_allowance_title: "Chế độ trợ cấp",
+    service_allowance_desc: "Tra cứu các khoản trợ cấp, công cụ tính toán tự động mức hưởng theo Nghị định 20 và hướng dẫn thủ tục.",
 
     // Search Bar
     search_input_label: "Tìm kiếm thông tin, dịch vụ",
@@ -147,6 +149,8 @@ const translations = {
     service_connection_desc: "Connecting you with communities, events, and individuals ready to support and share experiences nationwide.",
     service_map_title: "Support Map",
     service_map_desc: "Find hospitals, accessible rehabilitation centers, and obstacle-free public locations near you.",
+    service_allowance_title: "Social Allowance",
+    service_allowance_desc: "Search monthly social allowance, calculate rates under Decree 20, and view guidelines.",
 
     // Search Bar
     search_input_label: "Search for info, services",

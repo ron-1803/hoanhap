@@ -17,6 +17,15 @@ const SERVICES = [
     iconBorder: "border-blue-200 dark:border-blue-800",
   },
   {
+    to: "/tro-cap",
+    icon: "payments",
+    titleKey: "service_allowance_title",
+    descKey: "service_allowance_desc",
+    iconBg: "bg-amber-50 dark:bg-amber-950/50",
+    iconColor: "text-amber-600 dark:text-amber-400",
+    iconBorder: "border-amber-200 dark:border-amber-800",
+  },
+  {
     to: "/ket-noi",
     icon: "diversity_3",
     titleKey: "service_connection_title",
@@ -134,7 +143,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {SERVICES.map((service, i) => (
             <div key={service.to} className={`animate-fade-up stagger-${i + 1}`}>
               <ServiceCard
