@@ -34,7 +34,7 @@ export default function PrivacyPage() {
               1. Thông tin thu thập
             </h2>
             <p className="text-sm leading-relaxed text-on-surface-variant dark:text-tertiary-fixed-dim">
-              Hoà Nhập thu thập thông tin của bạn khi bạn chủ động đăng ký tài khoản hoặc gửi liên hệ, bao gồm:
+              Hoà Nhập thu thập thông tin của bạn khi bạn chủ động đăng ký tài khoản hoặc gửi góp ý, phản hồi, bao gồm:
               <br />
               • Thông tin đăng ký: Họ và tên, Email, Số điện thoại, và mật khẩu đã mã hóa.
               <br />
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
               5. Thông tin liên hệ giải quyết bảo mật
             </h2>
             <p className="text-sm leading-relaxed text-on-surface-variant dark:text-tertiary-fixed-dim">
-              Mọi thắc mắc, phản ánh hoặc yêu cầu xử lý quyền dữ liệu riêng tư, bạn có thể liên hệ trực tiếp với bộ phận bảo mật dữ liệu của Hoà Nhập qua email: <span className="font-bold text-primary dark:text-inverse-primary">privacy@hoanhap.org</span> hoặc gửi yêu cầu tại mục Liên hệ của trang web.
+              Mọi thắc mắc, phản ánh hoặc yêu cầu xử lý quyền dữ liệu riêng tư, bạn có thể liên hệ trực tiếp với bộ phận bảo mật dữ liệu của Hoà Nhập qua email: <span className="font-bold text-primary dark:text-inverse-primary">privacy@hoanhap.org</span> hoặc gửi yêu cầu tại mục Góp ý của trang web.
             </p>
           </div>
 

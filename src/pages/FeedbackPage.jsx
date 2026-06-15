@@ -3,13 +3,13 @@ import { useAccessibility } from "../contexts/AccessibilityContext";
 import Icon from "../components/ui/Icon";
 import Button from "../components/ui/Button";
 
-export default function ContactPage() {
+export default function FeedbackPage() {
   const { state: accessState, speakText } = useAccessibility();
   
   const [form, setForm] = useState({
     name: "",
     contactInfo: "",
-    supportField: "Góp ý website",
+    feedbackType: "Góp ý website",
     isBarrierReport: false,
     subject: "",
     message: ""
@@ -25,7 +25,7 @@ export default function ContactPage() {
       tempErrors.contactInfo = "Vui lòng nhập email hoặc số điện thoại";
     }
     if (!form.subject.trim()) tempErrors.subject = "Vui lòng nhập tiêu đề";
-    if (!form.message.trim()) tempErrors.message = "Vui lòng nhập nội dung";
+    if (!form.message.trim()) tempErrors.message = "Vui lòng nhập nội dung góp ý";
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -34,13 +34,13 @@ export default function ContactPage() {
     e.preventDefault();
     if (!validate()) {
       if (accessState.screenReader) {
-        speakText("Biểu mẫu gửi liên hệ có lỗi. Vui lòng kiểm tra lại các trường thông tin.");
+        speakText("Biểu mẫu gửi góp ý có lỗi. Vui lòng kiểm tra lại các trường thông tin.");
       }
       return;
     }
 
     setSuccess(true);
-    const msg = `Đã gửi liên hệ thành công. Xin chào ${form.name}, chúng tôi đã ghi nhận yêu cầu của bạn về lĩnh vực ${form.supportField}. Chúng tôi sẽ phản hồi trong vòng 24 giờ.`;
+    const msg = `Đã gửi ý kiến góp ý thành công. Xin chào ${form.name}, chúng tôi đã ghi nhận phản hồi của bạn về chủ đề ${form.feedbackType}. Cảm ơn sự đóng góp quý báu của bạn!`;
     if (accessState.screenReader) {
       speakText(msg);
     }
@@ -49,7 +49,7 @@ export default function ContactPage() {
     setForm({
       name: "",
       contactInfo: "",
-      supportField: "Góp ý website",
+      feedbackType: "Góp ý website",
       isBarrierReport: false,
       subject: "",
       message: ""
@@ -67,7 +67,7 @@ export default function ContactPage() {
       <section className="relative w-full min-h-[300px] flex items-center bg-primary-container dark:bg-primary-fixed border-b-2 border-primary overflow-hidden">
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-overlay">
           <img
-            alt="Đồ họa hình phong thư và điện thoại hỗ trợ"
+            alt="Đồ họa hình phong thư góp ý và ý kiến phản hồi"
             className="w-full h-full object-cover"
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200"
           />
@@ -75,10 +75,10 @@ export default function ContactPage() {
         <div className="relative z-10 max-w-[1440px] mx-auto px-gutter w-full py-12 md:py-16">
           <div className="max-w-2xl">
             <h1 className="font-headline-xl text-headline-xl text-on-primary-container dark:text-on-primary-fixed mb-4">
-              Liên hệ với chúng tôi
+              Ý kiến Đóng góp & Phản hồi
             </h1>
             <p className="font-body-lg text-body-lg text-on-primary-container/90 dark:text-on-primary-fixed/90 leading-relaxed">
-              Bạn có câu hỏi, đề xuất hoặc muốn báo cáo một rào cản tiếp cận trên website? Hãy kết nối với ban biên tập Cổng thông tin Hoà Nhập.
+              Ý kiến đóng góp của bạn giúp chúng tôi hoàn thiện Cổng thông tin Hoà Nhập tốt hơn, mang lại trải nghiệm tiếp cận công bằng và thuận tiện cho tất cả mọi người.
             </p>
           </div>
         </div>
@@ -93,11 +93,11 @@ export default function ContactPage() {
             <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 md:p-8 shadow-sm theme-transition">
               <h2 className="font-headline-lg text-headline-md text-primary dark:text-inverse-primary mb-6 flex items-center gap-3">
                 <Icon name="support_agent" size="text-3xl" className="text-primary dark:text-inverse-primary" />
-                Cổng thông tin hỗ trợ
+                Các kênh hỗ trợ trực tiếp
               </h2>
               
               <p className="text-body-medium text-on-surface-variant dark:text-tertiary-fixed-dim mb-8 leading-relaxed">
-                Hoà Nhập cung cấp các đường dây nóng tư vấn hoàn toàn miễn phí phục vụ riêng cho người khuyết tật trên toàn quốc.
+                Bên cạnh việc gửi góp ý trực tuyến, bạn cũng có thể liên hệ trực tiếp với các bộ phận hỗ trợ chuyên biệt của chúng tôi:
               </p>
 
               {/* Hotlines */}
@@ -160,7 +160,7 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim">
                   <Icon name="mail" className="text-primary shrink-0 mt-0.5" />
                   <span>
-                    <strong>Email:</strong> lienhe@hoanhap.org
+                    <strong>Email tiếp nhận:</strong> lienhe@hoanhap.org
                   </span>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export default function ContactPage() {
                   icon="volume_up"
                   className="w-full font-bold h-12 border-2"
                 >
-                  Đọc thông tin liên hệ
+                  Đọc thông tin liên lạc
                 </Button>
               </div>
             </div>
@@ -189,31 +189,31 @@ export default function ContactPage() {
                   </div>
                   <h2 className="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface">Đã gửi thành công!</h2>
                   <p className="text-body-lg text-on-surface-variant dark:text-tertiary-fixed-dim max-w-md mx-auto leading-relaxed">
-                    Cảm ơn ý kiến đóng góp của bạn. Ban quản trị Cổng thông tin Hoà Nhập đã tiếp nhận thông tin và sẽ phản hồi sớm nhất có thể.
+                    Cảm ơn phản hồi và góp ý của bạn. Ban biên tập Cổng thông tin Hoà Nhập sẽ ghi nhận và thực hiện các cải tiến phù hợp.
                   </p>
                   <div className="pt-4">
                     <Button variant="primary" onClick={() => setSuccess(false)} className="px-8 h-12">
-                      Gửi thư mới
+                      Gửi góp ý khác
                     </Button>
                   </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <h2 className="font-headline-lg text-headline-md text-on-surface dark:text-inverse-on-surface">
-                    Gửi tin nhắn hoặc Góp ý
+                    Biểu mẫu Góp ý & Phản hồi
                   </h2>
                   <p className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed">
-                    Ý kiến của bạn là vô giá đối với sự phát triển của cộng đồng. Các trường có dấu (<span className="text-error">*</span>) là bắt buộc.
+                    Ý kiến đóng góp của bạn rất có giá trị đối với chúng tôi. Các trường có dấu (<span className="text-error">*</span>) là bắt buộc.
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Full Name */}
                     <div className="flex flex-col space-y-2">
-                      <label htmlFor="contact-form-name" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
+                      <label htmlFor="feedback-form-name" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
                         Họ và tên <span className="text-error">*</span>
                       </label>
                       <input
-                        id="contact-form-name"
+                        id="feedback-form-name"
                         type="text"
                         value={form.name}
                         onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
@@ -232,11 +232,11 @@ export default function ContactPage() {
 
                     {/* Email or Phone */}
                     <div className="flex flex-col space-y-2">
-                      <label htmlFor="contact-form-info" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
+                      <label htmlFor="feedback-form-info" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
                         Email hoặc Số điện thoại <span className="text-error">*</span>
                       </label>
                       <input
-                        id="contact-form-info"
+                        id="feedback-form-info"
                         type="text"
                         value={form.contactInfo}
                         onChange={(e) => setForm(f => ({ ...f, contactInfo: e.target.value }))}
@@ -255,33 +255,32 @@ export default function ContactPage() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Support Field */}
+                    {/* Feedback Type */}
                     <div className="flex flex-col space-y-2">
-                      <label htmlFor="contact-form-field" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
-                        Lĩnh vực quan tâm
+                      <label htmlFor="feedback-form-type" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
+                        Chủ đề góp ý
                       </label>
                       <select
-                        id="contact-form-field"
-                        value={form.supportField}
-                        onChange={(e) => setForm(f => ({ ...f, supportField: e.target.value }))}
+                        id="feedback-form-type"
+                        value={form.feedbackType}
+                        onChange={(e) => setForm(f => ({ ...f, feedbackType: e.target.value }))}
                         className="w-full h-12 px-4 rounded-xl border-2 border-outline-variant dark:border-outline bg-surface-container-lowest dark:bg-tertiary text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-primary transition-all cursor-pointer"
                       >
-                        <option value="Góp ý website">Góp ý, phản ánh lỗi website</option>
-                        <option value="Hỗ trợ y tế">Chăm sóc sức khỏe & Y tế</option>
-                        <option value="Hỗ trợ giáo dục">Học tập & Giáo dục hòa nhập</option>
-                        <option value="Hỗ trợ việc làm">Tư vấn & Vay vốn giải quyết việc làm</option>
-                        <option value="Hỗ trợ pháp lý">Trợ giúp pháp lý miễn phí</option>
-                        <option value="Vận chuyển & Đi lại">Chuyến xe hỗ trợ di chuyển</option>
+                        <option value="Góp ý website">Góp ý cải tiến website</option>
+                        <option value="Báo cáo lỗi">Báo cáo lỗi kỹ thuật</option>
+                        <option value="Đóng góp nội dung">Đóng góp nội dung / tài liệu</option>
+                        <option value="Ý kiến dịch vụ">Phản ánh chất lượng dịch vụ hỗ trợ</option>
+                        <option value="Khác">Ý kiến đóng góp khác</option>
                       </select>
                     </div>
 
                     {/* Subject */}
                     <div className="flex flex-col space-y-2">
-                      <label htmlFor="contact-form-subject" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
+                      <label htmlFor="feedback-form-subject" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
                         Tiêu đề <span className="text-error">*</span>
                       </label>
                       <input
-                        id="contact-form-subject"
+                        id="feedback-form-subject"
                         type="text"
                         value={form.subject}
                         onChange={(e) => setForm(f => ({ ...f, subject: e.target.value }))}
@@ -302,30 +301,30 @@ export default function ContactPage() {
                   {/* Accessibility barrier checkbox */}
                   <div className="flex items-start gap-3 p-4 bg-primary/5 dark:bg-primary/10 border border-primary/10 rounded-xl">
                     <input
-                      id="contact-form-barrier"
+                      id="feedback-form-barrier"
                       type="checkbox"
                       checked={form.isBarrierReport}
                       onChange={(e) => setForm(f => ({ ...f, isBarrierReport: e.target.checked }))}
                       className="w-5 h-5 accent-primary border-2 border-primary/30 rounded focus:ring-primary cursor-pointer mt-0.5"
                     />
-                    <label htmlFor="contact-form-barrier" className="text-xs font-bold text-on-surface-variant dark:text-tertiary-fixed-dim cursor-pointer leading-relaxed">
+                    <label htmlFor="feedback-form-barrier" className="text-xs font-bold text-on-surface-variant dark:text-tertiary-fixed-dim cursor-pointer leading-relaxed">
                       Tôi muốn báo cáo một rào cản tiếp cận (lỗi hiển thị, đọc nội dung hoặc điều hướng bàn phím) mà tôi gặp phải trên website này.
                     </label>
                   </div>
 
                   {/* Message details */}
                   <div className="flex flex-col space-y-2">
-                    <label htmlFor="contact-form-message" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
+                    <label htmlFor="feedback-form-message" className="text-label-large font-bold text-on-surface dark:text-inverse-on-surface">
                       Nội dung chi tiết <span className="text-error">*</span>
                     </label>
                     <textarea
-                      id="contact-form-message"
+                      id="feedback-form-message"
                       rows="5"
                       value={form.message}
                       onChange={(e) => setForm(f => ({ ...f, message: e.target.value }))}
                       className={`w-full px-4 py-3 rounded-xl border-2 bg-surface-container-lowest dark:bg-tertiary text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-primary transition-all
                         ${errors.message ? "border-error" : "border-outline-variant dark:border-outline"}`}
-                      placeholder="Nhập nội dung chi tiết cần trợ giúp hoặc góp ý..."
+                      placeholder="Nhập nội dung chi tiết cần góp ý hoặc phản hồi..."
                       aria-describedby={errors.message ? "msg-error" : undefined}
                     />
                     {errors.message && (
@@ -339,7 +338,7 @@ export default function ContactPage() {
                   {/* Submit Button */}
                   <div className="pt-2">
                     <Button type="submit" variant="primary" icon="send" className="w-full h-14 font-bold rounded-xl shadow-md">
-                      Gửi tin nhắn liên hệ
+                      Gửi ý kiến góp ý
                     </Button>
                   </div>
                 </form>

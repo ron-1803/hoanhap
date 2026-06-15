@@ -58,7 +58,7 @@ const FAQ_DATABASE = [
     answer:
       "NKT được trợ giúp pháp lý miễn phí theo Luật Trợ giúp pháp lý 2017:\n\n• Tư vấn pháp luật miễn phí.\n• Đại diện ngoài tố tụng.\n• Bào chữa trong vụ án hình sự.\n\nĐường dây nóng trợ giúp pháp lý: 1900 6179.\nTrung tâm trợ giúp pháp lý có tại mỗi tỉnh/thành phố.",
     links: [
-      { label: "Liên hệ hỗ trợ", to: "/lien-he" },
+      { label: "Góp ý & Phản hồi", to: "/gop-y" },
     ],
   },
   {
@@ -125,7 +125,7 @@ function findResponse(query) {
   return {
     question: query,
     answer:
-      "Xin lỗi, tôi chưa tìm thấy thông tin phù hợp với câu hỏi của bạn.\n\nBạn có thể thử:\n• Chọn một trong các gợi ý bên dưới.\n• Gọi đường dây nóng: 1800 599 920 (miễn phí).\n• Sử dụng thanh tìm kiếm ở trang chủ.",
+      "Xin lỗi, tôi chưa tìm thấy thông tin phù hợp với câu hỏi của bạn.\n\nBạn có thể thử:\n• Chọn một trong các gợi ý bên dưới.\n• Sử dụng thanh tìm kiếm ở trang chủ.",
     links: [],
   };
 }

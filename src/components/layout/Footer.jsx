@@ -10,7 +10,7 @@ const FOOTER_LINKS = [
   { to: "/ve-chung-toi", labelKey: "about", icon: "info" },
   { to: "/dieu-khoan", labelKey: "terms", icon: "description" },
   { to: "/bao-mat", labelKey: "privacy", icon: "shield" },
-  { to: "/lien-he", labelKey: "contact", icon: "mail" },
+  { to: "/gop-y", labelKey: "contact", icon: "mail" },
 ];
 
 export default function Footer() {

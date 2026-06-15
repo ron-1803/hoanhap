@@ -16,7 +16,7 @@ const translations = {
     profile: "Hồ sơ cá nhân",
     admin: "Quản trị hệ thống",
     about: "Về chúng tôi",
-    contact: "Liên hệ",
+    contact: "Góp ý",
     home: "Trang chủ",
     terms: "Điều khoản",
     privacy: "Bảo mật",
@@ -63,7 +63,7 @@ const translations = {
     home_cta_badge: "Hỗ trợ miễn phí",
     home_cta_title: "Bạn cần hỗ trợ pháp lý trực tiếp?",
     home_cta_desc: "Đội ngũ chuyên gia luật của chúng tôi luôn sẵn sàng tư vấn miễn phí cho người khuyết tật và gia đình.",
-    home_cta_btn: "Liên hệ ngay",
+    home_cta_btn: "Góp ý ngay",
 
     // Home Services Cards
     service_rights_title: "Tra cứu quyền lợi",
@@ -127,7 +127,7 @@ const translations = {
     profile: "Profile",
     admin: "Admin Dashboard",
     about: "About Us",
-    contact: "Contact",
+    contact: "Feedback",
     home: "Home",
     terms: "Terms of Service",
     privacy: "Privacy Policy",
@@ -174,7 +174,7 @@ const translations = {
     home_cta_badge: "Free Legal Advice",
     home_cta_title: "Need direct legal assistance?",
     home_cta_desc: "Our legal experts are always ready to consult free of charge for disabled individuals and their families.",
-    home_cta_btn: "Contact Us Now",
+    home_cta_btn: "Give Feedback",
 
     // Home Services Cards
     service_rights_title: "Rights Search",

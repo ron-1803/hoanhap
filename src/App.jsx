@@ -11,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ConnectionPage from "./pages/ConnectionPage";
 import SupportMapPage from "./pages/MapPage";
 import RightsPage from "./pages/RightsPage";
-import ContactPage from "./pages/ContactPage";
+import FeedbackPage from "./pages/FeedbackPage";
 import AboutPage from "./pages/AboutPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
@@ -53,7 +53,7 @@ export default function App() {
                 <Route path="/ban-do" element={<SupportMapPage />} />
 
                 {/* ── Additional Completed Pages ── */}
-                <Route path="/lien-he" element={<ContactPage />} />
+                <Route path="/gop-y" element={<FeedbackPage />} />
                 <Route path="/ve-chung-toi" element={<AboutPage />} />
                 <Route path="/dieu-khoan" element={<TermsPage />} />
                 <Route path="/bao-mat" element={<PrivacyPage />} />

@@ -16,12 +16,6 @@ import Icon from "../ui/Icon";
 
 const EMERGENCY_CONTACTS = [
   {
-    name: "Đường dây nóng Hỗ trợ NKT",
-    number: "1800 599 920",
-    tel: "tel:1800599920",
-    description: "Miễn phí, 24/7",
-  },
-  {
     name: "Cấp cứu Y tế",
     number: "115",
     tel: "tel:115",

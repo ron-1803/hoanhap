@@ -192,6 +192,7 @@ export default function HomePage() {
           </div>
 
           <button
+            onClick={() => navigate("/gop-y")}
             className="shimmer-btn relative z-10
                        bg-white text-primary font-bold text-label-lg
                        px-8 py-4 rounded-xl
@@ -204,7 +205,7 @@ export default function HomePage() {
                        active:scale-95
                        hover:-translate-y-0.5"
           >
-            <Icon name="call" size="text-xl" />
+            <Icon name="feedback" size="text-xl" />
             {t("home_cta_btn")}
           </button>
         </div>
