@@ -283,11 +283,11 @@ export function AccessibilityProvider({ children }) {
 
           window.speechSynthesis.speak(utterance);
         } else {
-          // Fallback: Direct Google Translate TTS (client=tw-ob)
+          // Fallback: Direct Google Translate TTS API (translate.googleapis.com)
           // Bypasses server-side IP blocks by running directly on the user's browser/IP.
           // The API has a limit of 200 characters per request
           const safeText = text.length > 200 ? text.slice(0, 197) + "..." : text;
-          const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(
+          const url = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=vi&q=${encodeURIComponent(
             safeText
           )}`;
           const audio = new Audio();
