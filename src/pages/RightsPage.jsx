@@ -8,6 +8,7 @@ import Button from "../components/ui/Button";
 const DISABILITY_OPTIONS = ["Tất cả", "Trực quan/Khiếm thị", "Thính giác/Khiếm thính", "Vận động", "Trí tuệ"];
 const AGE_OPTIONS = ["Tất cả", "Trẻ em (<16 tuổi)", "Người trưởng thành (16-60 tuổi)", "Người cao tuổi (>60 tuổi)"];
 const PROVINCE_OPTIONS = ["Tất cả", "Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Cần Thơ", "Khác"];
+const CATEGORY_OPTIONS = ["Tất cả", "Chăm sóc sức khỏe", "Giáo dục & Đào tạo", "Việc làm & Sinh kế", "Giao thông & Công trình", "Văn hóa, Thể thao & Du lịch"];
 
 const BENTO_CATEGORIES = [
   {
@@ -451,7 +452,7 @@ export default function RightsPage() {
       {/* ─── Smart Filters Panel ─── */}
       <section id="filters-section" className="max-w-[1440px] mx-auto px-gutter py-8">
         <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 shadow-sm flex flex-col gap-6 theme-transition">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Keyword Search */}
             <div className="flex flex-col">
               <label htmlFor="rights-keyword" className="block text-label-large font-bold text-on-surface dark:text-tertiary-fixed mb-2">
@@ -470,6 +471,28 @@ export default function RightsPage() {
                   placeholder="Nhập thẻ BHYT, trợ cấp..."
                 />
               </div>
+            </div>
+
+            {/* Category Dropdown */}
+            <div className="flex flex-col">
+              <label htmlFor="rights-category" className="block text-label-large font-bold text-on-surface dark:text-tertiary-fixed mb-2">
+                Nhóm quyền lợi
+              </label>
+              <select
+                id="rights-category"
+                value={selectedBentoCategory}
+                onChange={(e) => {
+                  setSelectedBentoCategory(e.target.value);
+                  if (accessState.screenReader) {
+                    speakText(`Đang lọc theo nhóm quyền lợi: ${e.target.value}`);
+                  }
+                }}
+                className="w-full h-14 px-4 rounded-xl border-2 border-outline-variant dark:border-outline focus:border-primary bg-surface-container-lowest dark:bg-tertiary text-on-surface dark:text-inverse-on-surface cursor-pointer"
+              >
+                {CATEGORY_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
             </div>
 
             {/* Disability Type Dropdown */}
@@ -521,45 +544,6 @@ export default function RightsPage() {
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
-            </div>
-          </div>
-
-          {/* Nhóm Quyền Lợi (Categories) - Integrated directly below the grid filters */}
-          <div className="border-t border-outline-variant/30 pt-6">
-            <label className="block text-label-large font-bold text-on-surface dark:text-tertiary-fixed mb-3 flex items-center gap-2">
-              <Icon name="grid_view" size="text-sm" className="text-primary dark:text-inverse-primary" />
-              Nhóm quyền lợi chính
-            </label>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => handleBentoSelect("Tất cả")}
-                className={`px-4 py-2.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-all duration-200 theme-transition accessibility-focus
-                  ${selectedBentoCategory === "Tất cả"
-                    ? "bg-primary text-on-primary border-primary dark:bg-inverse-primary dark:text-on-primary-container dark:border-inverse-primary"
-                    : "bg-surface-container-lowest border-outline-variant text-on-surface dark:bg-tertiary dark:border-outline hover:border-primary"
-                  }`}
-              >
-                <Icon name="all_inclusive" size="text-sm" />
-                Tất cả nhóm
-              </button>
-              {BENTO_CATEGORIES.map((cat) => {
-                const isSelected = selectedBentoCategory === cat.title;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => handleBentoSelect(cat.title)}
-                    onFocus={() => handleSpeakItem(`${cat.title}. ${cat.description}`)}
-                    className={`px-4 py-2.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-all duration-200 theme-transition accessibility-focus
-                      ${isSelected
-                        ? "bg-primary text-on-primary border-primary dark:bg-inverse-primary dark:text-on-primary-container dark:border-inverse-primary"
-                        : "bg-surface-container-lowest border-outline-variant text-on-surface dark:bg-tertiary dark:border-outline hover:border-primary"
-                      }`}
-                  >
-                    <Icon name={cat.icon} size="text-sm" />
-                    {cat.title}
-                  </button>
-                );
-              })}
             </div>
           </div>
 
