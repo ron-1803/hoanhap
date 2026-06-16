@@ -294,6 +294,7 @@ export default function RightsPage() {
   const [selectedAge, setSelectedAge] = useState("Tất cả");
   const [selectedProvince, setSelectedProvince] = useState("Tất cả");
   const [selectedBentoCategory, setSelectedBentoCategory] = useState("Tất cả");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Sync searchQuery when searchParams in URL change
   useEffect(() => {
@@ -355,6 +356,11 @@ export default function RightsPage() {
     [savedRights, accessState.screenReader, speakText]
   );
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedDisability, selectedAge, selectedProvince, selectedBentoCategory]);
+
   // Real-time filtering logic
   const filteredPolicies = useMemo(() => {
     return policies.filter((pol) => {
@@ -382,12 +388,20 @@ export default function RightsPage() {
 
       return matchesSearch && matchesBento && matchesDisability && matchesAge && matchesProvince;
     });
-  }, [searchQuery, selectedBentoCategory, selectedDisability, selectedAge, selectedProvince]);
+  }, [policies, searchQuery, selectedBentoCategory, selectedDisability, selectedAge, selectedProvince]);
+
+  // Pagination config
+  const ITEMS_PER_PAGE = 4;
+  const totalPages = Math.ceil(filteredPolicies.length / ITEMS_PER_PAGE);
+  const paginatedPolicies = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredPolicies.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredPolicies, currentPage]);
 
   // Handle Bento Category Card selections
   const handleBentoSelect = (categoryTitle) => {
-    if (selectedBentoCategory === categoryTitle) {
-      setSelectedBentoCategory("Tất cả"); // Clear toggle
+    if (categoryTitle === "Tất cả" || selectedBentoCategory === categoryTitle) {
+      setSelectedBentoCategory("Tất cả");
       if (accessState.screenReader) {
         speakText(`Đã bỏ chọn bộ lọc danh mục. Đang hiển thị tất cả.`);
       }
@@ -510,9 +524,48 @@ export default function RightsPage() {
             </div>
           </div>
 
+          {/* Nhóm Quyền Lợi (Categories) - Integrated directly below the grid filters */}
+          <div className="border-t border-outline-variant/30 pt-6">
+            <label className="block text-label-large font-bold text-on-surface dark:text-tertiary-fixed mb-3 flex items-center gap-2">
+              <Icon name="grid_view" size="text-sm" className="text-primary dark:text-inverse-primary" />
+              Nhóm quyền lợi chính
+            </label>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => handleBentoSelect("Tất cả")}
+                className={`px-4 py-2.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-all duration-200 theme-transition accessibility-focus
+                  ${selectedBentoCategory === "Tất cả"
+                    ? "bg-primary text-on-primary border-primary dark:bg-inverse-primary dark:text-on-primary-container dark:border-inverse-primary"
+                    : "bg-surface-container-lowest border-outline-variant text-on-surface dark:bg-tertiary dark:border-outline hover:border-primary"
+                  }`}
+              >
+                <Icon name="all_inclusive" size="text-sm" />
+                Tất cả nhóm
+              </button>
+              {BENTO_CATEGORIES.map((cat) => {
+                const isSelected = selectedBentoCategory === cat.title;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleBentoSelect(cat.title)}
+                    onFocus={() => handleSpeakItem(`${cat.title}. ${cat.description}`)}
+                    className={`px-4 py-2.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-all duration-200 theme-transition accessibility-focus
+                      ${isSelected
+                        ? "bg-primary text-on-primary border-primary dark:bg-inverse-primary dark:text-on-primary-container dark:border-inverse-primary"
+                        : "bg-surface-container-lowest border-outline-variant text-on-surface dark:bg-tertiary dark:border-outline hover:border-primary"
+                      }`}
+                  >
+                    <Icon name={cat.icon} size="text-sm" />
+                    {cat.title}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Quick Clear filters link */}
           {(searchQuery !== "" || selectedDisability !== "Tất cả" || selectedAge !== "Tất cả" || selectedProvince !== "Tất cả" || selectedBentoCategory !== "Tất cả") && (
-            <div className="flex justify-end">
+            <div className="flex justify-end border-t border-outline-variant/30 pt-4">
               <button
                 onClick={() => {
                   setSearchQuery("");
@@ -520,6 +573,7 @@ export default function RightsPage() {
                   setSelectedAge("Tất cả");
                   setSelectedProvince("Tất cả");
                   setSelectedBentoCategory("Tất cả");
+                  setCurrentPage(1);
                   triggerToast("Đã thiết lập lại tất cả các bộ lọc tra cứu");
                 }}
                 className="text-xs font-bold text-secondary dark:text-inverse-primary hover:underline flex items-center gap-1.5 accessibility-focus"
@@ -532,57 +586,6 @@ export default function RightsPage() {
         </div>
       </section>
 
-      {/* ─── Bento Grid categories ─── */}
-      <section className="max-w-[1440px] mx-auto px-gutter py-4">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface mb-6 flex items-center gap-3">
-          <Icon name="grid_view" className="text-primary dark:text-inverse-primary" />
-          Các Nhóm Quyền Lợi Chính
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {BENTO_CATEGORIES.map((cat, idx) => {
-            const isSelected = selectedBentoCategory === cat.title;
-            // First 3 items span 1 col, remaining items span logically
-            const colSpan = idx >= 3 ? "lg:col-span-1" : "";
-            return (
-              <div
-                key={cat.id}
-                onClick={() => handleBentoSelect(cat.title)}
-                onFocus={() => handleSpeakItem(`${cat.title}. ${cat.description}`)}
-                tabIndex={0}
-                role="button"
-                aria-pressed={isSelected}
-                className={`flex flex-col justify-between border-2 rounded-2xl p-6 cursor-pointer transition-all duration-200 shadow-sm theme-transition focus-visible:ring-4 focus-visible:ring-primary ${colSpan}
-                  ${isSelected
-                    ? "bg-primary-fixed border-primary dark:bg-on-primary-fixed-variant dark:border-inverse-primary"
-                    : "bg-surface-container-lowest border-outline-variant dark:bg-tertiary dark:border-outline hover:border-primary"
-                  }`}
-              >
-                <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary dark:bg-inverse-primary/20 dark:text-inverse-primary flex items-center justify-center shadow-inner">
-                      <Icon name={cat.icon} size="text-2xl" />
-                    </div>
-                    {isSelected && (
-                      <span className="px-2.5 py-0.5 bg-emerald-600/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-400 text-xs font-bold rounded-full flex items-center gap-0.5">
-                        <Icon name="check" size="text-xs" />
-                        Đang chọn
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="font-bold text-lg text-on-surface dark:text-inverse-on-surface mb-2">
-                    {cat.title}
-                  </h3>
-                  <p className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed">
-                    {cat.description}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
       {/* ─── Filtered Policies Grid ─── */}
       <section className="max-w-[1440px] mx-auto px-gutter py-12">
         <h2 className="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface mb-8 flex items-center gap-3">
@@ -590,52 +593,111 @@ export default function RightsPage() {
           Danh sách quyền lợi phù hợp ({filteredPolicies.length})
         </h2>
 
-        {filteredPolicies.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredPolicies.map((pol) => {
-              const isSaved = savedRights.includes(pol.id);
-              return (
-                <div
-                  key={pol.id}
-                  onClick={() => setActiveModalPolicy(pol)}
-                  onFocus={() => handleSpeakItem(`${pol.name}. Thuộc nhóm: ${pol.category}. Mô tả: ${pol.description}`)}
-                  tabIndex={0}
-                  role="button"
-                  className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 hover:border-primary dark:hover:border-inverse-primary transition-all duration-200 shadow-sm flex flex-col justify-between text-left theme-transition group focus-visible:ring-4 focus-visible:ring-primary"
-                >
-                  <div>
-                    <div className="flex justify-between items-start mb-4">
-                      <span className="px-3 py-1 bg-primary/10 text-primary dark:bg-inverse-primary/20 dark:text-inverse-primary text-xs font-bold rounded-full capitalize">
-                        {pol.category}
-                      </span>
-                      <button
-                        onClick={(e) => handleToggleBookmark(e, pol)}
-                        aria-label={isSaved ? `Bỏ lưu chính sách ${pol.name}` : `Lưu chính sách ${pol.name}`}
-                        className="w-10 h-10 border border-outline-variant dark:border-outline rounded-full flex items-center justify-center text-outline-variant dark:text-outline hover:bg-surface-container dark:hover:bg-tertiary-container hover:text-primary transition-all accessibility-focus"
-                      >
-                        <Icon name="bookmark" className={isSaved ? "text-primary dark:text-inverse-primary" : ""} filled={isSaved} />
-                      </button>
+        {paginatedPolicies.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {paginatedPolicies.map((pol) => {
+                const isSaved = savedRights.includes(pol.id);
+                return (
+                  <div
+                    key={pol.id}
+                    onClick={() => setActiveModalPolicy(pol)}
+                    onFocus={() => handleSpeakItem(`${pol.name}. Thuộc nhóm: ${pol.category}. Mô tả: ${pol.description}`)}
+                    tabIndex={0}
+                    role="button"
+                    className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 hover:border-primary dark:hover:border-inverse-primary transition-all duration-200 shadow-sm flex flex-col justify-between text-left theme-transition group focus-visible:ring-4 focus-visible:ring-primary"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="px-3 py-1 bg-primary/10 text-primary dark:bg-inverse-primary/20 dark:text-inverse-primary text-xs font-bold rounded-full capitalize">
+                          {pol.category}
+                        </span>
+                        <button
+                          onClick={(e) => handleToggleBookmark(e, pol)}
+                          aria-label={isSaved ? `Bỏ lưu chính sách ${pol.name}` : `Lưu chính sách ${pol.name}`}
+                          className="w-10 h-10 border border-outline-variant dark:border-outline rounded-full flex items-center justify-center text-outline-variant dark:text-outline hover:bg-surface-container dark:hover:bg-tertiary-container hover:text-primary transition-all accessibility-focus"
+                        >
+                          <Icon name="bookmark" className={isSaved ? "text-primary dark:text-inverse-primary" : ""} filled={isSaved} />
+                        </button>
+                      </div>
+
+                      <h3 className="font-bold text-lg text-on-surface dark:text-inverse-on-surface group-hover:text-primary dark:group-hover:text-inverse-primary leading-snug mb-2.5">
+                        {pol.name}
+                      </h3>
+                      <p className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed mb-6">
+                        {pol.description}
+                      </p>
                     </div>
 
-                    <h3 className="font-bold text-lg text-on-surface dark:text-inverse-on-surface group-hover:text-primary dark:group-hover:text-inverse-primary leading-snug mb-2.5">
-                      {pol.name}
-                    </h3>
-                    <p className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed mb-6">
-                      {pol.description}
-                    </p>
+                    <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
+                      <span className="text-xs font-bold text-secondary dark:text-inverse-primary flex items-center gap-1 group-hover:underline">
+                        <Icon name="info" size="text-sm" />
+                        Xem chi tiết từng thủ tục
+                      </span>
+                      <Icon name="chevron_right" className="text-outline group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
+                );
+              })}
+            </div>
 
-                  <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
-                    <span className="text-xs font-bold text-secondary dark:text-inverse-primary flex items-center gap-1 group-hover:underline">
-                      <Icon name="info" size="text-sm" />
-                      Xem chi tiết từng thủ tục
-                    </span>
-                    <Icon name="chevron_right" className="text-outline group-hover:translate-x-1 transition-transform" />
-                  </div>
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-outline-variant/30 pt-8 mt-8 theme-transition">
+                <span className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim font-medium">
+                  Hiển thị {Math.min(filteredPolicies.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)}-{Math.min(filteredPolicies.length, currentPage * ITEMS_PER_PAGE)} trên tổng số {filteredPolicies.length} quyền lợi
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      if (currentPage > 1) {
+                        setCurrentPage(currentPage - 1);
+                        speakText(`Chuyển sang trang ${currentPage - 1}`);
+                      }
+                    }}
+                    disabled={currentPage === 1}
+                    className="w-10 h-10 rounded-xl border-2 border-outline-variant dark:border-outline flex items-center justify-center text-on-surface hover:border-primary disabled:opacity-40 disabled:hover:border-outline-variant transition-all accessibility-focus dark:text-inverse-on-surface"
+                    aria-label="Trang trước"
+                  >
+                    <Icon name="chevron_left" />
+                  </button>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => {
+                        setCurrentPage(page);
+                        speakText(`Chuyển sang trang ${page}`);
+                      }}
+                      className={`w-10 h-10 rounded-xl border-2 font-bold text-sm transition-all accessibility-focus
+                        ${currentPage === page
+                          ? "bg-primary border-primary text-on-primary dark:bg-inverse-primary dark:border-inverse-primary dark:text-on-primary-container"
+                          : "bg-surface-container-lowest border-outline-variant text-on-surface hover:border-primary dark:bg-tertiary dark:border-outline dark:text-inverse-on-surface"
+                        }`}
+                      aria-label={`Trang ${page}`}
+                      aria-current={currentPage === page ? "page" : undefined}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => {
+                      if (currentPage < totalPages) {
+                        setCurrentPage(currentPage + 1);
+                        speakText(`Chuyển sang trang ${currentPage + 1}`);
+                      }
+                    }}
+                    disabled={currentPage === totalPages}
+                    className="w-10 h-10 rounded-xl border-2 border-outline-variant dark:border-outline flex items-center justify-center text-on-surface hover:border-primary disabled:opacity-40 disabled:hover:border-outline-variant transition-all accessibility-focus dark:text-inverse-on-surface"
+                    aria-label="Trang sau"
+                  >
+                    <Icon name="chevron_right" />
+                  </button>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16 bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-8 theme-transition">
             <Icon name="policy" size="text-5xl" className="text-outline mb-4" />
