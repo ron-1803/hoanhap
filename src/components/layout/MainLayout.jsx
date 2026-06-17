@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useAccessibility } from "../../contexts/AccessibilityContext";
 import useTTSFocusHandler from "../../hooks/useTTSFocusHandler";
 import AccessibilitySidebar from "./AccessibilitySidebar";
@@ -26,6 +26,8 @@ import ChatbotPanel from "../chatbot/ChatbotPanel";
  */
 export default function MainLayout() {
   const { state, speakText } = useAccessibility();
+  const location = useLocation();
+  const isMapPage = location.pathname === "/ban-do";
 
   // ── Mount global TTS focus/hover listeners when screenReader is active ──
   useTTSFocusHandler();
@@ -93,7 +95,7 @@ export default function MainLayout() {
         </main>
 
         {/* Footer */}
-        <Footer />
+        {!isMapPage && <Footer />}
       </div>
 
       {/* Chatbot panel with FAB toggle */}
