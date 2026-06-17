@@ -731,54 +731,6 @@ export default function RightsPage() {
         </div>
       </section>
 
-      {/* ─── 3-Step Procedure Guide ─── */}
-      <section className="max-w-[1440px] mx-auto px-gutter py-12">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface mb-8 flex items-center gap-3">
-          <Icon name="assignment" className="text-primary dark:text-inverse-primary" />
-          Hướng Dẫn Hưởng Quyền Lợi
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Step 1 */}
-          <div className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 shadow-sm theme-transition relative hover:border-primary transition-all">
-            <div className="w-12 h-12 rounded-full bg-primary text-on-primary font-bold text-lg flex items-center justify-center mb-4 shadow-md">
-              1
-            </div>
-            <h3 className="font-bold text-base text-on-surface dark:text-inverse-on-surface mb-2">
-              Xác nhận khuyết tật
-            </h3>
-            <p className="text-xs leading-relaxed text-on-surface-variant dark:text-tertiary-fixed-dim">
-              Đăng ký trực tiếp tại Ủy ban nhân dân cấp xã nơi cư trú để được Hội đồng xác định mức độ khuyết tật xem xét và cấp Giấy xác nhận khuyết tật chính thức.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 shadow-sm theme-transition relative hover:border-primary transition-all">
-            <div className="w-12 h-12 rounded-full bg-primary text-on-primary font-bold text-lg flex items-center justify-center mb-4 shadow-md">
-              2
-            </div>
-            <h3 className="font-bold text-base text-on-surface dark:text-inverse-on-surface mb-2">
-              Chuẩn bị hồ sơ
-            </h3>
-            <p className="text-xs leading-relaxed text-on-surface-variant dark:text-tertiary-fixed-dim">
-              Hoàn thiện tờ khai, chuẩn bị ảnh chân dung, căn cước công dân và các chứng từ y khoa (nếu có) liên quan để làm thủ tục nhận trợ cấp xã hội.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 shadow-sm theme-transition relative hover:border-primary transition-all">
-            <div className="w-12 h-12 rounded-full bg-primary text-on-primary font-bold text-lg flex items-center justify-center mb-4 shadow-md">
-              3
-            </div>
-            <h3 className="font-bold text-base text-on-surface dark:text-inverse-on-surface mb-2">
-              Nộp & Nhận kết quả
-            </h3>
-            <p className="text-xs leading-relaxed text-on-surface-variant dark:text-tertiary-fixed-dim">
-              Nộp hồ sơ trực tiếp tại UBND cấp xã hoặc nộp trực tuyến qua Cổng dịch vụ công quốc gia, theo dõi trạng thái hồ sơ và nhận kết quả chi trả trợ cấp hàng tháng.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* ─── Floating Toast Alerts (Accessibility Live region) ─── */}
       <div
