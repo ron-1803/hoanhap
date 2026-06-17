@@ -141,6 +141,11 @@ const ITEMS_PER_PAGE = 3;
 // ─── Reusable Accessible Focus Trap Modal Component ─────────────
 function FocusTrapModal({ isOpen, onClose, title, children }) {
   const modalRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -162,7 +167,7 @@ function FocusTrapModal({ isOpen, onClose, title, children }) {
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -186,11 +191,11 @@ function FocusTrapModal({ isOpen, onClose, title, children }) {
     modal.addEventListener("keydown", handleKeyDown);
     return () => {
       modal.removeEventListener("keydown", handleKeyDown);
-      if (originalFocus) {
+      if (originalFocus && typeof originalFocus.focus === 'function') {
         originalFocus.focus();
       }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
