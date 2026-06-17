@@ -373,12 +373,13 @@ export default function ConnectionPage({ isTab = false }) {
               src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=1200"
             />
           </div>
+          <div className="absolute inset-0 z-0 bg-black/40"></div>
           <div className="relative z-10 max-w-[1440px] mx-auto px-gutter w-full py-12 md:py-16">
             <div className="max-w-2xl">
-              <h1 className="font-headline-xl text-headline-xl text-on-primary-container dark:text-on-primary-fixed mb-4">
+              <h1 className="font-headline-xl text-headline-xl text-white dark:text-on-primary-fixed mb-4 drop-shadow-md">
                 Kết nối yêu thương
               </h1>
-              <p className="font-body-lg text-body-lg text-on-primary-container/90 dark:text-on-primary-fixed/90 mb-8 leading-relaxed">
+              <p className="font-body-lg text-body-lg text-white/95 dark:text-on-primary-fixed/90 mb-8 leading-relaxed drop-shadow-md">
                 Nơi kết nối bạn với những tấm lòng hảo tâm và cộng đồng sẵn sàng hỗ trợ, chia sẻ những khó khăn trong cuộc sống thường nhật.
               </p>
               <div className="flex flex-wrap gap-4">

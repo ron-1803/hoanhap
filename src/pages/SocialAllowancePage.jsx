@@ -280,7 +280,7 @@ export default function SocialAllowancePage() {
                 <p className="text-xs font-bold text-primary dark:text-inverse-primary uppercase tracking-wider mb-1">
                   {t("allowance_calc_result_badge")}
                 </p>
-                <div className="text-3xl font-extrabold text-primary dark:text-inverse-primary">
+                <div className="text-3xl font-extrabold text-[#00E5FF] dark:text-[#00E5FF] drop-shadow-md">
                   {monthlyTotal.toLocaleString("vi-VN")} <span className="text-xl font-normal">đ/{language === "en" ? "month" : "tháng"}</span>
                 </div>
                 <p className="text-xs text-on-surface-variant dark:text-tertiary-fixed-dim mt-2 leading-relaxed">
@@ -307,7 +307,7 @@ export default function SocialAllowancePage() {
 
             <div className="relative border-l-2 border-primary/30 dark:border-outline ml-4 space-y-8 py-2">
               {/* Step 1 */}
-              <div className="relative pl-8">
+              <div className="relative pl-8 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded" tabIndex={0}>
                 <span className="absolute -left-4 top-1 w-8 h-8 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center text-sm">
                   1
                 </span>
@@ -322,7 +322,7 @@ export default function SocialAllowancePage() {
               </div>
 
               {/* Step 2 */}
-              <div className="relative pl-8">
+              <div className="relative pl-8 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded" tabIndex={0}>
                 <span className="absolute -left-4 top-1 w-8 h-8 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center text-sm">
                   2
                 </span>
@@ -337,7 +337,7 @@ export default function SocialAllowancePage() {
               </div>
 
               {/* Step 3 */}
-              <div className="relative pl-8">
+              <div className="relative pl-8 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded" tabIndex={0}>
                 <span className="absolute -left-4 top-1 w-8 h-8 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center text-sm">
                   3
                 </span>
@@ -352,7 +352,7 @@ export default function SocialAllowancePage() {
               </div>
 
               {/* Step 4 */}
-              <div className="relative pl-8">
+              <div className="relative pl-8 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded" tabIndex={0}>
                 <span className="absolute -left-4 top-1 w-8 h-8 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center text-sm">
                   4
                 </span>

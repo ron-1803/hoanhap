@@ -95,7 +95,7 @@ export default function Header() {
   return (
     <header
       className="glass-header border-b border-outline-variant/50
-                 dark:border-outline/50 w-full sticky top-0 z-40 theme-transition"
+                 dark:border-outline/50 w-full sticky top-0 z-[9999] theme-transition"
     >
       <div className="flex justify-between items-center px-4 md:px-margin-desktop py-3 w-full max-w-[1440px] mx-auto">
         {/* ── Logo & Brand ── */}

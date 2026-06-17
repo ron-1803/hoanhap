@@ -382,7 +382,7 @@ export default function ForumPage({ isTab = false }) {
                   placeholder={language === "en" ? "Search posts..." : "Tìm bài viết..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl pl-8 pr-3 py-2 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition"
+                  className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl pl-8 pr-3 py-2 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition placeholder-gray-400 dark:placeholder-gray-300"
                 />
                 <Icon name="search" className="absolute left-2.5 top-2.5 text-outline-variant text-sm" />
               </div>
@@ -586,7 +586,7 @@ export default function ForumPage({ isTab = false }) {
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleAddComment(post.id);
                         }}
-                        className="flex-grow bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition"
+                        className="flex-grow bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition placeholder-gray-400 dark:placeholder-gray-300"
                       />
                       <button
                         onClick={() => handleAddComment(post.id)}

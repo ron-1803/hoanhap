@@ -463,7 +463,7 @@ export default function RightsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 h-14 rounded-xl border-2 border-outline-variant dark:border-outline focus:border-primary bg-surface-container-lowest dark:bg-tertiary text-on-surface dark:text-inverse-on-surface"
+                  className="w-full pl-12 pr-4 h-14 rounded-xl border-2 border-outline-variant dark:border-outline focus:border-primary bg-surface-container-lowest dark:bg-tertiary text-on-surface dark:text-inverse-on-surface placeholder-gray-400 dark:placeholder-gray-300"
                   placeholder="Nhập thẻ BHYT, trợ cấp..."
                 />
               </div>

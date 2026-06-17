@@ -114,13 +114,13 @@ function CustomMarker({ location, isActive, onSelect }) {
       html: `
         <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 shadow-lg transition-all duration-200 cursor-pointer
           ${isActive
-            ? "bg-secondary text-on-secondary border-on-secondary scale-110 shadow-secondary/50"
+            ? "bg-[#00E5FF] text-black border-[#00E5FF] scale-110 shadow-[#00E5FF]/50 ring-4 ring-[#00E5FF]/30 animate-pulse"
             : "bg-primary text-on-primary border-white hover:bg-primary-container hover:text-on-primary-container"
           }">
           <span class="material-symbols-outlined text-xl font-bold">${location.icon}</span>
         </div>
         <div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] mx-auto -mt-[2px]
-          ${isActive ? "border-t-secondary" : "border-t-primary"}">
+          ${isActive ? "border-t-[#00E5FF]" : "border-t-primary"}">
         </div>
       `,
       iconSize: [40, 48],
@@ -417,7 +417,7 @@ export default function MapPage() {
                 }}
                 className={`px-3 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-bold rounded-full transition-all duration-150 active:scale-95 border-2 accessibility-focus whitespace-nowrap
                   ${isActive
-                    ? "bg-primary border-primary text-on-primary dark:bg-inverse-primary dark:border-inverse-primary dark:text-primary"
+                    ? "bg-[#00E5FF] border-[#00E5FF] text-black"
                     : "bg-surface-container border-outline-variant text-on-surface-variant dark:bg-tertiary-container dark:border-outline dark:text-tertiary-fixed-dim hover:border-primary"
                   }`}
               >
@@ -576,7 +576,7 @@ export default function MapPage() {
             <button
               onClick={handleZoomIn}
               aria-label="Phóng to bản đồ"
-              className="w-12 h-12 bg-surface dark:bg-inverse-surface border-2 border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface rounded-xl flex items-center justify-center hover:bg-surface-container-high transition-colors shadow-lg accessibility-focus"
+              className="w-12 h-12 bg-[#00E5FF] text-black border-2 border-[#00E5FF] rounded-xl flex items-center justify-center hover:bg-cyan-300 transition-colors shadow-lg accessibility-focus font-bold"
             >
               <Icon name="add" size="text-2xl" />
             </button>
@@ -584,7 +584,7 @@ export default function MapPage() {
             <button
               onClick={handleZoomOut}
               aria-label="Thu nhỏ bản đồ"
-              className="w-12 h-12 bg-surface dark:bg-inverse-surface border-2 border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface rounded-xl flex items-center justify-center hover:bg-surface-container-high transition-colors shadow-lg accessibility-focus"
+              className="w-12 h-12 bg-[#00E5FF] text-black border-2 border-[#00E5FF] rounded-xl flex items-center justify-center hover:bg-cyan-300 transition-colors shadow-lg accessibility-focus font-bold"
             >
               <Icon name="remove" size="text-2xl" />
             </button>
@@ -592,7 +592,7 @@ export default function MapPage() {
             <button
               onClick={handleNearMe}
               aria-label="Định vị vị trí hiện tại của tôi"
-              className="w-12 h-12 bg-primary text-on-primary rounded-xl flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg accessibility-focus"
+              className="w-12 h-12 bg-primary text-on-primary border-2 border-primary rounded-xl flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg accessibility-focus"
             >
               <Icon name="my_location" size="text-2xl" />
             </button>
