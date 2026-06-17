@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { useAccessibility } from "../../contexts/AccessibilityContext";
 import Icon from "../ui/Icon";
 
@@ -211,6 +212,9 @@ function ChatMessage({ message, isUser }) {
 // ─── Main ChatbotPanel Component ────────────────────────────────
 export default function ChatbotPanel() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const isMapPage = location.pathname === "/ban-do";
+
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -323,7 +327,7 @@ export default function ChatbotPanel() {
   }, [stopSpeaking]);
 
   return (
-    <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
+    <div className={`fixed right-6 md:right-8 z-50 flex flex-col items-end transition-all duration-300 ${isMapPage ? 'bottom-[220px]' : 'bottom-6 md:bottom-8'}`}>
       {/* ═══ Chat Panel Window ═══ */}
       {isOpen && (
         <div
