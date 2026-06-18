@@ -356,7 +356,7 @@ export default function ForumPage({ isTab = false }) {
               }
               setIsNewPostOpen(true);
             }}
-            className="w-full md:w-auto bg-[#1ea459] hover:bg-[#198d4c] text-white font-bold px-5 py-2.5 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2 accessibility-focus active:scale-95 text-sm whitespace-nowrap"
+            className="w-full md:w-auto bg-primary hover:bg-primary-dark text-on-primary dark:bg-primary-fixed dark:text-on-primary-fixed font-bold px-5 py-2.5 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2 accessibility-focus active:scale-95 text-sm whitespace-nowrap"
           >
             <Icon name="add" size="text-base" />
             {language === "en" ? "New Thread" : "Đăng bài mới"}
@@ -381,8 +381,8 @@ export default function ForumPage({ isTab = false }) {
                     onClick={() => setSelectedSubType(type.key)}
                     className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all accessibility-focus ${
                       selectedSubType === type.key
-                        ? "bg-[#1ea459] text-white shadow-sm"
-                        : "bg-[#e8f7ec] text-[#1ea459] dark:bg-tertiary-container dark:text-inverse-on-surface hover:bg-[#d1ecd9] dark:hover:bg-tertiary-fixed-dim"
+                        ? "bg-primary text-on-primary dark:bg-primary-fixed dark:text-on-primary-fixed shadow-sm"
+                        : "bg-surface-container-high text-on-surface-variant dark:bg-tertiary-container dark:text-inverse-on-surface hover:bg-surface-container-highest dark:hover:bg-tertiary-fixed-dim"
                     }`}
                   >
                     {language === "en" ? type.en : type.vi}
@@ -448,7 +448,7 @@ export default function ForumPage({ isTab = false }) {
                             )}
                           </h3>
                           <div className="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant dark:text-surface-dim mt-1">
-                            <span>{language === "en" ? "By" : "Bởi"} <span className="font-bold text-[#1ea459]">{post.authorName}</span></span>
+                            <span>{language === "en" ? "By" : "Bởi"} <span className="font-bold text-primary dark:text-primary-fixed">{post.authorName}</span></span>
                             <span className="flex items-center gap-1"><Icon name="schedule" size="text-[12px]" /> {new Date(post.createdAt).toLocaleDateString("vi-VN")}</span>
                             <span className="flex items-center gap-1"><Icon name="chat_bubble_outline" size="text-[12px]" /> {post.comments?.length || 0} bình luận</span>
                           </div>
@@ -474,13 +474,13 @@ export default function ForumPage({ isTab = false }) {
 
                     {/* 1-Click Support Banner for "đồng hành" support posts */}
                     {post.board === "support" && post.subType === "đồng hành" && (
-                      <div className="bg-[#e8f7ec] dark:bg-[#198d4c]/20 border border-[#1ea459]/30 rounded-xl p-3 my-2 flex flex-col sm:flex-row justify-between items-center gap-3">
+                      <div className="bg-primary-container/30 dark:bg-primary-fixed/10 border border-primary/30 rounded-xl p-3 my-2 flex flex-col sm:flex-row justify-between items-center gap-3">
                         <div className="text-left">
-                          <div className="text-xs font-bold text-[#1ea459] dark:text-[#a0e4b9] flex items-center gap-1.5">
+                          <div className="text-xs font-bold text-primary-dark dark:text-primary-fixed flex items-center gap-1.5">
                             <Icon name="handshake" size="text-sm" />
                             {language === "en" ? "Companion Help Needed" : "Cần hỗ trợ đồng hành trực tiếp"}
                           </div>
-                          <p className="text-[10px] text-[#198d4c] dark:text-[#a0e4b9]/80 mt-1">
+                          <p className="text-[10px] text-primary dark:text-primary-fixed/80 mt-1">
                             {language === "en"
                               ? "This member needs help. Contact them or offer support directly below."
                               : "Tác giả cần giúp đỡ trực tiếp. Nhấp vào nút để gửi thông tin đăng ký hỗ trợ."}
@@ -495,7 +495,7 @@ export default function ForumPage({ isTab = false }) {
                             }
                             setActiveSupportPost(post);
                           }}
-                          className="bg-[#1ea459] text-white text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-[#198d4c] transition-all shadow-sm accessibility-focus whitespace-nowrap"
+                          className="bg-primary text-on-primary font-bold px-3 py-1.5 rounded-lg hover:bg-primary-dark transition-all shadow-sm accessibility-focus whitespace-nowrap text-[11px]"
                         >
                           {language === "en" ? "I can assist this" : "Tôi muốn hỗ trợ việc này"}
                         </button>
@@ -541,7 +541,7 @@ export default function ForumPage({ isTab = false }) {
 
                       {/* Offers count if any */}
                       {post.offers && post.offers.length > 0 && (
-                        <span className="text-[10px] font-bold bg-[#e8f7ec] text-[#1ea459] px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="text-[10px] font-bold bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full flex items-center gap-1">
                           <Icon name="check" size="text-[10px]" />
                           {post.offers.length} {language === "en" ? "assists offered" : "lượt đăng ký"}
                         </span>
@@ -552,25 +552,48 @@ export default function ForumPage({ isTab = false }) {
                     <div className="mt-3 pt-3 border-t border-outline-variant/20">
                       {/* Render comments list */}
                       {post.comments && post.comments.length > 0 && (
-                        <div className="space-y-2 mb-3 max-h-[200px] overflow-y-auto scrollbar-thin pr-2">
+                        <div className="space-y-4 mb-4 max-h-[300px] overflow-y-auto scrollbar-thin pr-2">
                           {post.comments.map((comm, cIndex) => (
-                            <div key={comm.id || cIndex} className="text-xs bg-surface-container-low dark:bg-tertiary-container/30 rounded-xl p-3 border border-outline-variant/30">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-bold text-[11px] text-on-surface dark:text-inverse-on-surface">
-                                  {comm.authorName}
-                                </span>
-                                {comm.authorBadge && (
-                                  <span className="px-1.5 py-0.5 bg-teal-50 text-teal-800 font-bold text-[8px] rounded uppercase">
-                                    {comm.authorBadge}
-                                  </span>
-                                )}
-                                <span className="text-[9px] text-outline ml-auto">
-                                  {comm.createdAt ? new Date(comm.createdAt).toLocaleDateString("vi-VN") : ""}
-                                </span>
+                            <div key={comm.id || cIndex} className="flex items-start gap-3">
+                              {/* Avatar */}
+                              <div className="w-9 h-9 rounded-full border-2 border-primary/20 dark:border-primary-fixed/20 flex items-center justify-center shrink-0 bg-surface-container">
+                                <span className="text-base" role="img" aria-label="avatar">🧑‍🦲</span>
                               </div>
-                              <p className="text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed">
-                                {comm.text}
-                              </p>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                  <span className="font-bold text-[13px] text-primary-dark dark:text-primary-fixed">
+                                    {comm.authorName}
+                                  </span>
+                                  {comm.authorBadge && (
+                                    <span className="px-1.5 py-0.5 bg-primary/10 text-primary-dark dark:text-primary-fixed font-bold text-[9px] rounded uppercase">
+                                      {comm.authorBadge}
+                                    </span>
+                                  )}
+                                  <span className="text-[10px] text-outline ml-auto">
+                                    {comm.createdAt ? new Date(comm.createdAt).toLocaleDateString("vi-VN") : ""}
+                                  </span>
+                                </div>
+                                <p className="text-on-surface-variant dark:text-tertiary-fixed-dim text-[13px] leading-relaxed mb-2">
+                                  {comm.text}
+                                </p>
+                                <div className="flex items-center gap-4 text-xs text-outline font-medium">
+                                  <button className="flex items-center gap-1 hover:text-primary dark:hover:text-primary-fixed transition-colors accessibility-focus">
+                                    <Icon name="thumb_up" size="text-[14px]" /> {comm.likes || 0}
+                                  </button>
+                                  <button 
+                                    onClick={() => {
+                                      setCommentInputs({ ...commentInputs, [post.id]: `@${comm.authorName} ` });
+                                      setTimeout(() => {
+                                        const el = document.getElementById(`comment-input-${post.id}`);
+                                        if (el) el.focus();
+                                      }, 0);
+                                    }}
+                                    className="flex items-center gap-1 hover:text-primary dark:hover:text-primary-fixed transition-colors accessibility-focus"
+                                  >
+                                    <Icon name="reply" size="text-[14px]" /> {language === "en" ? "Reply" : "Trả lời"}
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -579,6 +602,7 @@ export default function ForumPage({ isTab = false }) {
                       {/* Add Comment Input */}
                       <div className="flex gap-2">
                         <input
+                          id={`comment-input-${post.id}`}
                           type="text"
                           placeholder={language === "en" ? "Write a comment..." : "Viết bình luận..."}
                           value={commentInputs[post.id] || ""}
@@ -586,11 +610,11 @@ export default function ForumPage({ isTab = false }) {
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleAddComment(post.id);
                           }}
-                          className="flex-grow bg-surface-container-lowest dark:bg-tertiary-container border border-outline-variant/60 rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-[#1ea459] theme-transition"
+                          className="flex-grow bg-surface-container-lowest dark:bg-tertiary-container border border-outline-variant/60 rounded-xl px-4 py-2 text-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition"
                         />
                         <button
                           onClick={() => handleAddComment(post.id)}
-                          className="bg-surface-container-high hover:bg-surface-variant text-on-surface-variant font-bold text-xs px-3.5 py-1.5 rounded-xl transition-colors accessibility-focus active:scale-95"
+                          className="bg-surface-container-high hover:bg-surface-variant text-on-surface-variant font-bold text-sm px-4 py-2 rounded-xl transition-colors accessibility-focus active:scale-95"
                         >
                           {language === "en" ? "Send" : "Gửi"}
                         </button>
@@ -623,12 +647,12 @@ export default function ForumPage({ isTab = false }) {
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
                         isSelected 
-                          ? "bg-[#e8f7ec] dark:bg-tertiary-container font-bold text-[#1ea459] dark:text-inverse-primary" 
+                          ? "bg-primary-container dark:bg-primary-fixed/20 font-bold text-on-primary-container dark:text-primary-fixed" 
                           : "text-on-surface hover:bg-surface-container-high dark:hover:bg-tertiary-container dark:text-inverse-on-surface"
                       }`}
                     >
                       <span className="flex items-center gap-2">
-                        <Icon name={board.icon} size="text-sm" className={isSelected ? "text-[#1ea459]" : "text-outline"} />
+                        <Icon name={board.icon} size="text-sm" className={isSelected ? "text-primary dark:text-primary-fixed" : "text-outline"} />
                         {language === "en" ? board.labelEn : board.labelVi}
                       </span>
                       <span className="text-xs bg-surface-container dark:bg-surface-container-highest px-2 py-0.5 rounded-full text-on-surface-variant font-medium">
