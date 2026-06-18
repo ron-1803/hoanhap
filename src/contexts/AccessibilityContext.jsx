@@ -14,6 +14,7 @@ let voicesLoggedThisSession = false;
    • highContrast – Ultra-high-contrast mode (black bg, yellow/white text)
    • screenReader – TTS via Web Speech API with Vietnamese voice
    • keyboardNav  – Enhanced focus indicators for keyboard-only users
+   • readingMark  – Horizontal reading guide that follows pointer/touch
    
    TTS Strategy:
    Uses the browser's built-in Web Speech API (SpeechSynthesis).
@@ -40,6 +41,7 @@ const defaultState = {
   highContrast: false,
   screenReader: true,
   keyboardNav: false,
+  readingMark: false,
 };
 
 // ─── Load persisted state from localStorage ─────────────────────
@@ -81,6 +83,7 @@ const ActionTypes = {
   TOGGLE_HIGH_CONTRAST: "TOGGLE_HIGH_CONTRAST",
   TOGGLE_SCREEN_READER: "TOGGLE_SCREEN_READER",
   TOGGLE_KEYBOARD_NAV: "TOGGLE_KEYBOARD_NAV",
+  TOGGLE_READING_MARK: "TOGGLE_READING_MARK",
   RESET: "RESET",
 };
 
@@ -102,6 +105,8 @@ function accessibilityReducer(state, action) {
       return { ...state, screenReader: !state.screenReader };
     case ActionTypes.TOGGLE_KEYBOARD_NAV:
       return { ...state, keyboardNav: !state.keyboardNav };
+    case ActionTypes.TOGGLE_READING_MARK:
+      return { ...state, readingMark: !state.readingMark };
     case ActionTypes.RESET:
       return { ...defaultState };
     default:
@@ -235,6 +240,16 @@ export function AccessibilityProvider({ children }) {
       cl.remove("keyboard-nav");
     }
   }, [state.keyboardNav]);
+
+  // ── Apply reading mark class to <html> ──
+  useEffect(() => {
+    const cl = document.documentElement.classList;
+    if (state.readingMark) {
+      cl.add("reading-mark-enabled");
+    } else {
+      cl.remove("reading-mark-enabled");
+    }
+  }, [state.readingMark]);
 
   // ── Stop speaking ──
   const stopSpeaking = useCallback(() => {
@@ -385,6 +400,10 @@ export function AccessibilityProvider({ children }) {
     () => dispatch({ type: ActionTypes.TOGGLE_KEYBOARD_NAV }),
     []
   );
+  const toggleReadingMark = useCallback(
+    () => dispatch({ type: ActionTypes.TOGGLE_READING_MARK }),
+    []
+  );
   const resetAccessibility = useCallback(
     () => dispatch({ type: ActionTypes.RESET }),
     []
@@ -398,6 +417,7 @@ export function AccessibilityProvider({ children }) {
     toggleHighContrast,
     toggleScreenReader,
     toggleKeyboardNav,
+    toggleReadingMark,
     resetAccessibility,
     speakText,
     stopSpeaking,

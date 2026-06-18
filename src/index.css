@@ -210,6 +210,50 @@ html.high-contrast svg path {
 }
 
 /* ═══════════════════════════════════════════════════
+   READING MARK
+   Visual-only reading mask. It follows pointer/touch/focus,
+   dims surrounding content, and leaves the current line clear.
+   ═══════════════════════════════════════════════════ */
+.reading-mark-overlay {
+  --reading-mark-line-height: 1.75rem;
+  --reading-mark-height: calc(var(--reading-mark-line-height) * 1.9);
+  position: fixed;
+  left: var(--sidebar-width, 80px);
+  right: 0;
+  height: var(--reading-mark-height);
+  transform: translateY(-50%);
+  z-index: 45;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.06);
+  border-top: 2px solid rgba(255, 255, 255, 0.72);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 -100vh 0 100vh rgba(0, 0, 0, 0.56),
+    0 100vh 0 100vh rgba(0, 0, 0, 0.56),
+    0 0 0 1px rgba(0, 43, 107, 0.18);
+}
+
+.dark .reading-mark-overlay {
+  background: rgba(17, 19, 24, 0.08);
+  border-color: rgba(176, 198, 255, 0.95);
+  box-shadow:
+    0 -100vh 0 100vh rgba(0, 0, 0, 0.62),
+    0 100vh 0 100vh rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(176, 198, 255, 0.26);
+}
+
+.high-contrast .reading-mark-overlay {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-top: 3px solid #ffff00;
+  border-bottom: 3px solid #ffff00;
+  box-shadow:
+    0 -100vh 0 100vh rgba(0, 0, 0, 0.28),
+    0 100vh 0 100vh rgba(0, 0, 0, 0.28);
+}
+
+/* ═══════════════════════════════════════════════════
    COMPONENT LAYER — Reusable accessible patterns
    ═══════════════════════════════════════════════════ */
 @layer components {

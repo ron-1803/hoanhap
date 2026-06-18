@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useAccessibility } from "../../contexts/AccessibilityContext";
 import useTTSFocusHandler from "../../hooks/useTTSFocusHandler";
 import AccessibilitySidebar from "./AccessibilitySidebar";
+import ReadingMarkOverlay from "./ReadingMarkOverlay";
 import Header from "./Header";
 import Footer from "./Footer";
 import ChatbotPanel from "../chatbot/ChatbotPanel";
@@ -100,6 +101,9 @@ export default function MainLayout() {
 
       {/* Chatbot panel with FAB toggle */}
       <ChatbotPanel />
+
+      {/* Visual-only reading guide; does not block pointer or keyboard input */}
+      <ReadingMarkOverlay />
     </div>
   );
 }

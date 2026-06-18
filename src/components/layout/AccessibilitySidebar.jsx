@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useAccessibility } from "../../contexts/AccessibilityContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import Icon from "../ui/Icon";
@@ -13,7 +13,7 @@ import SOSModal from "./SOSModal";
  * 3. Giảm chữ (decrease font scale)
  * 4. Tương phản (high contrast toggle)
  * 5. Giao diện tối (dark mode toggle)
- * 6. Điều hướng (keyboard nav toggle)
+ * 6. Thước đọc (reading mark toggle)
  * 7. SOS (emergency — pinned to bottom)
  *
  * Each button is 64×64px with aria-label and aria-pressed (for toggles).
@@ -28,7 +28,7 @@ export default function AccessibilitySidebar() {
     toggleDarkMode,
     toggleHighContrast,
     toggleScreenReader,
-    toggleKeyboardNav,
+    toggleReadingMark,
   } = useAccessibility();
   const { t, language } = useLanguage();
 
@@ -143,6 +143,25 @@ export default function AccessibilitySidebar() {
           />
           <span className="icon-label">
             {t("sidebar_dark")}
+          </span>
+        </button>
+
+        {/* Tool 6: Reading Mark */}
+        <button
+          onClick={toggleReadingMark}
+          aria-label={t("sidebar_reading_mark_desc")}
+          aria-pressed={state.readingMark}
+          className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
+            state.readingMark ? activeClasses : inactiveClasses
+          }`}
+        >
+          <Icon
+            name="horizontal_rule"
+            size="text-2xl"
+            className="group-hover:scale-110 transition-transform"
+          />
+          <span className="icon-label">
+            {t("sidebar_reading_mark")}
           </span>
         </button>
 
