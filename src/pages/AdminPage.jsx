@@ -745,13 +745,22 @@ export default function AdminPage() {
             2. Hồ sơ kết nối ({connections.length})
           </button>
           <button
+            onClick={() => setActiveTab("locations")}
+            className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all accessibility-focus whitespace-nowrap ${
+              activeTab === "locations" ? "bg-primary text-on-primary shadow-sm" : "text-on-surface-variant hover:bg-surface-variant/40"
+            }`}
+          >
+            <Icon name="pin_drop" size="text-sm" />
+            3. Bản đồ hỗ trợ ({locations.length})
+          </button>
+          <button
             onClick={() => setActiveTab("forum")}
             className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all accessibility-focus whitespace-nowrap ${
               activeTab === "forum" ? "bg-primary text-on-primary shadow-sm" : "text-on-surface-variant hover:bg-surface-variant/40"
             }`}
           >
             <Icon name="forum" size="text-sm" />
-            3. Diễn đàn ({forumPosts.length})
+            4. Diễn đàn ({forumPosts.length})
           </button>
           <button
             onClick={() => setActiveTab("allowance")}
@@ -760,7 +769,7 @@ export default function AdminPage() {
             }`}
           >
             <Icon name="payments" size="text-sm" />
-            4. Trợ cấp & Cơ quan ({offices.length})
+            5. Trợ cấp & Cơ quan ({offices.length})
           </button>
         </div>
       </section>
@@ -1314,6 +1323,209 @@ export default function AdminPage() {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Tab 3: Map Locations ── */}
+        {activeTab === "locations" && (
+          <div className="space-y-6 animate-[fadeIn_0.15s_ease-out]">
+            <div className="flex justify-between items-center bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-4 md:p-6 shadow-sm theme-transition">
+              <div>
+                <h2 className="font-bold text-base text-on-surface dark:text-inverse-on-surface flex items-center gap-2">
+                  <Icon name="pin_drop" className="text-primary" />
+                  Quản lý Địa điểm Hỗ trợ (Bản đồ)
+                </h2>
+                <p className="text-xs text-on-surface-variant dark:text-tertiary-fixed-dim">
+                  Thêm, sửa, xóa các địa điểm hỗ trợ Người khuyết tật trên bản đồ (hiển thị song song với dữ liệu tự động).
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingLocId(null);
+                  setLocForm({
+                    name: "",
+                    category: "Cơ sở phục hồi chức năng",
+                    address: "",
+                    phone: "",
+                    workingHours: "08:00 - 17:00",
+                    lat: "",
+                    lng: "",
+                    description: "",
+                    badgesText: "Dốc xe lăn, Thang máy tiếp cận",
+                  });
+                  setIsLocFormOpen(!isLocFormOpen);
+                }}
+                className="bg-primary text-on-primary font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-all flex items-center gap-1.5 accessibility-focus active:scale-95"
+              >
+                <Icon name={isLocFormOpen ? "expand_less" : "add"} size="text-sm" />
+                {isLocFormOpen ? "Đóng form" : "Thêm địa điểm"}
+              </button>
+            </div>
+
+            {isLocFormOpen && (
+              <form onSubmit={handleSaveLocation} className="bg-surface-container dark:bg-tertiary border-2 border-primary/40 dark:border-outline rounded-3xl p-6 shadow-md theme-transition grid grid-cols-1 md:grid-cols-2 gap-4 animate-[fadeIn_0.2s_ease-out]">
+                <h3 className="md:col-span-2 font-bold text-sm text-primary dark:text-inverse-primary border-b border-outline-variant/60 pb-2 flex items-center gap-2">
+                  <Icon name="edit_location_alt" />
+                  {editingLocId ? "Hiệu chỉnh địa điểm" : "Thêm địa điểm mới"}
+                </h3>
+                <div className="md:col-span-2">
+                  <label htmlFor="loc-name" className="block text-xs font-bold mb-1.5">Tên cơ sở / địa điểm (*)</label>
+                  <input
+                    id="loc-name"
+                    type="text"
+                    required
+                    value={locForm.name}
+                    onChange={(e) => setLocForm({ ...locForm, name: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="Trung tâm phục hồi chức năng A..."
+                  />
+                </div>
+                <div>
+                  <label htmlFor="loc-category" className="block text-xs font-bold mb-1.5">Phân loại (*)</label>
+                  <select
+                    id="loc-category"
+                    value={locForm.category}
+                    onChange={(e) => setLocForm({ ...locForm, category: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                  >
+                    <option value="Cơ sở phục hồi chức năng">Cơ sở phục hồi chức năng</option>
+                    <option value="Trung tâm giáo dục đặc biệt">Trung tâm giáo dục đặc biệt</option>
+                    <option value="Cộng đồng hỗ trợ">Cộng đồng hỗ trợ</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="loc-phone" className="block text-xs font-bold mb-1.5">Số điện thoại</label>
+                  <input
+                    id="loc-phone"
+                    type="text"
+                    value={locForm.phone}
+                    onChange={(e) => setLocForm({ ...locForm, phone: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="0243..."
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="loc-address" className="block text-xs font-bold mb-1.5">Địa chỉ chi tiết (*)</label>
+                  <input
+                    id="loc-address"
+                    type="text"
+                    required
+                    value={locForm.address}
+                    onChange={(e) => setLocForm({ ...locForm, address: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="Số nhà, đường, phường, quận..."
+                  />
+                </div>
+                <div>
+                  <label htmlFor="loc-lat" className="block text-xs font-bold mb-1.5">Vĩ độ (Lat) (*)</label>
+                  <input
+                    id="loc-lat"
+                    type="number"
+                    step="any"
+                    required
+                    value={locForm.lat}
+                    onChange={(e) => setLocForm({ ...locForm, lat: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="Ví dụ: 16.4637"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="loc-lng" className="block text-xs font-bold mb-1.5">Kinh độ (Lng) (*)</label>
+                  <input
+                    id="loc-lng"
+                    type="number"
+                    step="any"
+                    required
+                    value={locForm.lng}
+                    onChange={(e) => setLocForm({ ...locForm, lng: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="Ví dụ: 107.5909"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="loc-badges" className="block text-xs font-bold mb-1.5">Tiện ích hỗ trợ (Cách nhau bằng dấu phẩy)</label>
+                  <input
+                    id="loc-badges"
+                    type="text"
+                    value={locForm.badgesText}
+                    onChange={(e) => setLocForm({ ...locForm, badgesText: e.target.value })}
+                    className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none"
+                    placeholder="Dốc xe lăn, Thang máy, WC cho NKT..."
+                  />
+                </div>
+                
+                <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsLocFormOpen(false);
+                      setEditingLocId(null);
+                    }}
+                    className="border border-outline px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-surface-variant/30 accessibility-focus"
+                  >
+                    Hủy bỏ
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-primary text-on-primary font-bold px-6 py-2.5 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm accessibility-focus"
+                  >
+                    {editingLocId ? "Cập nhật địa điểm" : "Lưu địa điểm"}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Table listing locations */}
+            <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 shadow-sm theme-transition">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs" role="table">
+                  <thead>
+                    <tr className="border-b border-outline-variant/60" role="row">
+                      <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Tên địa điểm / Loại</th>
+                      <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Địa chỉ</th>
+                      <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Tọa độ</th>
+                      <th className="pb-3 font-bold text-on-surface-variant/70 uppercase text-right" role="columnheader">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {locations.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="py-6 text-center text-on-surface-variant/60">Chưa có địa điểm thủ công nào. Bản đồ đang hiển thị dữ liệu tự động.</td>
+                      </tr>
+                    ) : (
+                      locations.map((loc) => (
+                        <tr key={loc.id} className="border-b border-outline-variant/30 last:border-b-0" role="row">
+                          <td className="py-3 pr-2" role="cell">
+                            <div className="font-bold text-on-surface dark:text-inverse-on-surface">{loc.name}</div>
+                            <div className="text-[10px] text-primary mt-0.5">{loc.category}</div>
+                          </td>
+                          <td className="py-3 font-semibold text-on-surface-variant max-w-[200px] truncate" role="cell" title={loc.address}>{loc.address}</td>
+                          <td className="py-3 font-mono text-xs text-on-surface-variant" role="cell">{loc.lat.toFixed(4)}, {loc.lng.toFixed(4)}</td>
+                          <td className="py-3 text-right" role="cell">
+                            <div className="flex justify-end gap-2">
+                              <button
+                                onClick={() => handleEditLocation(loc)}
+                                title="Sửa"
+                                className="p-1.5 rounded-lg border border-outline hover:bg-surface-variant/50 transition-colors accessibility-focus"
+                              >
+                                <Icon name="edit" size="text-sm" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteLocation(loc.id)}
+                                title="Xóa"
+                                className="p-1.5 rounded-lg border border-outline hover:bg-error-container/10 text-error hover:border-error transition-colors accessibility-focus"
+                              >
+                                <Icon name="delete" size="text-sm" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

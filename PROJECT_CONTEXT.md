@@ -149,11 +149,15 @@ Giao diện Diễn đàn (`ForumPage.jsx`) đã được thiết kế lại thà
 - **Firebase:** Nút Thích bình luận cập nhật trường `likes` trong mảng `comments` trên Firestore.
 - **Màu sắc:** Đồng bộ toàn bộ với hệ thống theme `primary` của trang web (không dùng hardcoded hex).
 
-### 8.4 Homepage Guide Video Section
-Từ Pull Request #1, chỉ giữ lại component `GuideVideoSection.jsx` — video hướng dẫn sử dụng trang web trên trang chủ với phụ đề tiếng Việt (`public/captions/guide.vi.vtt`).
+### 8.4 Homepage Welcome Guide
+Đã loại bỏ video giới thiệu (`GuideVideoSection`) theo yêu cầu người dùng vì giới hạn file size của Cloudflare Pages. Thay thế bằng component `WelcomeGuideModal.jsx` - một hộp thoại văn bản giới thiệu ngắn gọn các tính năng, tự động hiện lên khi người dùng truy cập lần đầu và lưu trạng thái vào `localStorage`.
 
 ### 8.5 ServiceCard — Icon-based (không dùng ảnh)
 `ServiceCard.jsx` hiện sử dụng **Material Icons** (`icon` prop) thay vì ảnh URL (`imageSrc`). Mỗi thẻ dịch vụ trên `HomePage.jsx` truyền `icon`, `iconBg`, `iconColor`, `iconBorder` riêng biệt cho từng dịch vụ.
+
+### 8.6 Quản lý Địa điểm Bản đồ (Map Management)
+Khôi phục tính năng thêm/sửa/xóa địa điểm hỗ trợ trên `AdminPage`.
+Trang `MapPage` nay có khả năng hiển thị đồng thời Marker lấy tự động từ `Overpass API` và Marker do Admin tạo từ Firebase `locations` collection. Popup của Firebase Marker hỗ trợ render trực tiếp các thẻ tiện ích tiếp cận (`accessibilityBadges`) (như Dốc xe lăn, Thang máy).
 
 ---
 
