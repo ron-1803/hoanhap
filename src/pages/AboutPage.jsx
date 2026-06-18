@@ -12,31 +12,31 @@ const TEAM_MEMBERS = [
     name: "Nguyễn Trần Thiện Đạt",
     role: "Front End Developer",
     desc: "Thiết kế và xây dựng giao diện người dùng, tích hợp các công cụ hỗ trợ tiếp cận như tăng cỡ chữ, chế độ tương phản cao và phím tắt.",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200"
+    avatar: "/team/dat.jpg"
   },
   {
     name: "Trần Văn Lân",
     role: "Back End Developer",
     desc: "Xây dựng kiến trúc hệ thống máy chủ, quản lý cơ sở dữ liệu và tích hợp các API dịch vụ cốt lõi.",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
+    avatar: "/team/lan.png"
   },
   {
     name: "Lương Ngọc Hiếu",
     role: "R.API Developer",
     desc: "Nghiên cứu và phát triển các API tiếp cận, tối ưu kết nối dịch vụ giọng nói (TTS) và các dịch vụ tích hợp.",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200"
+    avatar: "/team/hieu.jpeg"
   },
   {
     name: "Nguyễn Tuấn Khang",
     role: "Quản Lý Dữ Liệu",
     desc: "Thu thập, kiểm duyệt, phân loại và chuẩn hóa các thông tin chính sách, địa điểm hỗ trợ tiếp cận.",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200"
+    avatar: "/team/khang.jpg"
   },
   {
     name: "Huỳnh Văn Tân",
     role: "Tester",
     desc: "Kiểm thử chất lượng sản phẩm, tối ưu khả năng tiếp cận chuẩn WCAG 2.2 và cải thiện trải nghiệm người dùng.",
-    avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=200"
+    avatar: "/team/tan.jpg"
   }
 ];
 
