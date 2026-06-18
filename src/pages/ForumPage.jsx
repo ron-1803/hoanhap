@@ -101,6 +101,34 @@ export default function ForumPage({ isTab = false }) {
     });
   }, [posts, selectedBoard, selectedSubType, searchQuery]);
 
+  // Compute active members
+  const activeMembers = useMemo(() => {
+    const counts = {};
+    posts.forEach(post => {
+      if (!counts[post.authorId]) {
+        counts[post.authorId] = {
+          id: post.authorId,
+          name: post.authorName,
+          badge: post.authorBadge,
+          count: 0
+        };
+      }
+      counts[post.authorId].count += 1;
+    });
+    return Object.values(counts)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  }, [posts]);
+
+  // Compute posts count per board
+  const boardCounts = useMemo(() => {
+    const counts = {};
+    posts.forEach(post => {
+      counts[post.board] = (counts[post.board] || 0) + 1;
+    });
+    return counts;
+  }, [posts]);
+
   // Handle reaction submission
   const handleReact = async (postId, reactionType) => {
     if (!user) {
@@ -305,303 +333,356 @@ export default function ForumPage({ isTab = false }) {
         </section>
       )}
 
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8">
         
-        {/* ─── Sidebar Area ─── */}
-        <aside className="lg:col-span-1 space-y-6">
-          
-          {/* Rules Panel */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-5 shadow-sm theme-transition">
-            <h2 className="font-bold text-sm text-primary dark:text-inverse-primary mb-3 flex items-center gap-2 border-b border-outline-variant/60 pb-2">
-              <Icon name="verified_user" size="text-sm" />
-              {language === "en" ? "Code of Conduct" : "Quy tắc ứng xử"}
-            </h2>
-            <ul className="text-xs space-y-2.5 text-on-surface-variant dark:text-tertiary-fixed-dim list-disc pl-4 leading-relaxed">
-              <li>{language === "en" ? "Be respectful & constructive." : "Tôn trọng và xây dựng tích cực."}</li>
-              <li>{language === "en" ? "Do not make others feel pitied." : "Không dùng từ ngữ ban phát, thương hại."}</li>
-              <li>{language === "en" ? "Strictly prohibit scams and spam." : "Nghiêm cấm lừa đảo, trục lợi từ thiện."}</li>
-              <li>{language === "en" ? "Promote peer support & equity." : "Thúc đẩy bình đẳng và thấu hiểu nhau."}</li>
-            </ul>
+        {/* ─── Top Bar: Search & New Post ─── */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+          <div className="relative w-full md:w-[400px]">
+            <input
+              type="text"
+              placeholder={language === "en" ? "Search posts by title..." : "Tìm kiếm bài viết theo tiêu đề..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-surface dark:bg-tertiary-container border border-outline-variant/60 rounded-full pl-10 pr-4 py-2.5 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50 theme-transition placeholder-gray-400"
+            />
+            <Icon name="search" className="absolute left-3.5 top-2.5 text-outline-variant text-lg" />
           </div>
 
-          {/* Board Selector */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-4 shadow-sm theme-transition space-y-2">
-            <h2 className="font-bold text-xs text-outline mb-2 uppercase tracking-wider px-2">
-              {language === "en" ? "Thematic Boards" : "Các Chuyên Mục"}
-            </h2>
-            {Object.entries(FORUM_BOARDS).map(([key, board]) => (
-              <button
-                key={key}
-                onClick={() => {
-                  setSelectedBoard(key);
-                  setSelectedSubType("all");
-                }}
-                className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs flex items-center justify-between transition-all accessibility-focus ${
-                  selectedBoard === key
-                    ? "bg-primary text-on-primary dark:bg-primary-fixed dark:text-on-primary-fixed shadow-sm"
-                    : "hover:bg-surface-container-high dark:hover:bg-tertiary-container text-on-surface-variant dark:text-inverse-on-surface"
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  <Icon name={board.icon} size="text-sm" />
-                  {language === "en" ? board.labelEn : board.labelVi}
-                </span>
-                <Icon name="chevron_right" size="text-xs" />
-              </button>
-            ))}
-          </div>
-        </aside>
+          <button
+            onClick={() => {
+              if (!user) {
+                alert(language === "en" ? "Please sign in to write a post!" : "Vui lòng đăng nhập để viết bài!");
+                return;
+              }
+              setIsNewPostOpen(true);
+            }}
+            className="w-full md:w-auto bg-[#1ea459] hover:bg-[#198d4c] text-white font-bold px-5 py-2.5 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2 accessibility-focus active:scale-95 text-sm whitespace-nowrap"
+          >
+            <Icon name="add" size="text-base" />
+            {language === "en" ? "New Thread" : "Đăng bài mới"}
+          </button>
+        </div>
 
-        {/* ─── Main Content Area ─── */}
-        <main className="lg:col-span-3 space-y-6">
+        {/* ─── 2-Column Main Layout ─── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
-          {/* Sub-type Filters & Search Bar */}
-          <div className="glass-card rounded-3xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
-            {/* Sub-type Horizontal Buttons */}
-            <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-thin">
-              {FORUM_BOARDS[selectedBoard].subTypes.map((type) => (
-                <button
-                  key={type.key}
-                  onClick={() => setSelectedSubType(type.key)}
-                  className={`px-3 py-1.5 rounded-full font-bold text-xs border transition-all accessibility-focus whitespace-nowrap ${
-                    selectedSubType === type.key
-                      ? "bg-secondary text-on-secondary border-secondary shadow-sm"
-                      : "border-outline hover:bg-surface-container-high dark:hover:bg-tertiary-container text-on-surface-variant"
-                  }`}
-                >
-                  {language === "en" ? type.en : type.vi}
-                </button>
-              ))}
+          {/* ─── Left Main Content (2/3) ─── */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {/* Sub-type Filters (Chủ đề phổ biến) */}
+            <div className="space-y-3">
+              <h2 className="font-bold text-lg text-primary-dark dark:text-inverse-primary">
+                {language === "en" ? "Popular Topics" : "Chủ đề phổ biến"}
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {FORUM_BOARDS[selectedBoard].subTypes.map((type) => (
+                  <button
+                    key={type.key}
+                    onClick={() => setSelectedSubType(type.key)}
+                    className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all accessibility-focus ${
+                      selectedSubType === type.key
+                        ? "bg-[#1ea459] text-white shadow-sm"
+                        : "bg-[#e8f7ec] text-[#1ea459] dark:bg-tertiary-container dark:text-inverse-on-surface hover:bg-[#d1ecd9] dark:hover:bg-tertiary-fixed-dim"
+                    }`}
+                  >
+                    {language === "en" ? type.en : type.vi}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Search Input & Action Button */}
-            <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
-              <div className="relative w-full md:w-64">
-                <input
-                  type="text"
-                  placeholder={language === "en" ? "Search posts..." : "Tìm bài viết..."}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl pl-8 pr-3 py-2 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition placeholder-gray-400 dark:placeholder-gray-300"
-                />
-                <Icon name="search" className="absolute left-2.5 top-2.5 text-outline-variant text-sm" />
+            {/* Posts List Header */}
+            <div className="flex items-center justify-between border-b border-outline-variant/30 pb-2">
+              <h2 className="font-bold text-lg text-primary-dark dark:text-inverse-primary">
+                {language === "en" ? "Latest Posts" : "Bài viết mới nhất"}
+              </h2>
+              <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+                <span>{language === "en" ? "Sort by:" : "Sắp xếp:"}</span>
+                <select className="bg-surface dark:bg-tertiary border border-outline-variant/60 rounded-md px-2 py-1 focus:outline-none">
+                  <option>{language === "en" ? "Newest" : "Mới nhất"}</option>
+                  <option>{language === "en" ? "Oldest" : "Cũ nhất"}</option>
+                </select>
               </div>
-              {isTab && (
-                <button
-                  onClick={() => {
-                    if (!user) {
-                      alert(language === "en" ? "Please sign in to write a post!" : "Vui lòng đăng nhập để viết bài!");
-                      return;
-                    }
-                    setIsNewPostOpen(true);
-                  }}
-                  className="w-full md:w-auto bg-primary text-on-primary font-bold px-4 py-2 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm flex items-center justify-center gap-2 accessibility-focus active:scale-95 text-xs whitespace-nowrap"
-                >
-                  <Icon name="add" size="text-sm" />
-                  {language === "en" ? "New Thread" : "Viết bài mới"}
-                </button>
+            </div>
+
+            {/* Posts List */}
+            <div className="space-y-4">
+              {filteredPosts.length === 0 ? (
+                <div className="bg-surface dark:bg-tertiary border border-dashed border-outline-variant rounded-2xl p-12 text-center theme-transition">
+                  <Icon name="chat_bubble_outline" size="text-4xl" className="text-outline-variant mb-3" />
+                  <p className="text-sm text-on-surface-variant font-medium">
+                    {language === "en" 
+                      ? "No posts found. Be the first to start a conversation!"
+                      : "Chưa có bài viết nào. Hãy là người đầu tiên chia sẻ!"}
+                  </p>
+                </div>
+              ) : (
+                filteredPosts.map((post) => (
+                  <article
+                    key={post.id}
+                    className="bg-white dark:bg-tertiary rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-outline-variant/20 hover:shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary flex flex-col gap-3"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        {/* Avatar */}
+                        <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center shrink-0 overflow-hidden border-2 border-white shadow-sm">
+                          <span className="text-2xl" role="img" aria-label="avatar">🧑‍🦲</span>
+                        </div>
+                        
+                        {/* Meta */}
+                        <div className="flex-1">
+                          <h3 className="font-bold text-lg text-on-surface dark:text-inverse-on-surface line-clamp-1 leading-tight flex items-center gap-2">
+                            {post.title}
+                            {post.authorBadge && (
+                              <span 
+                                title={post.authorBadge}
+                                className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                                  post.authorBadge === "Đại sứ Hoà Nhập"
+                                    ? "bg-teal-100 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300"
+                                    : "bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300"
+                                }`}
+                              >
+                                <Icon name={post.authorBadge === "Đại sứ Hoà Nhập" ? "verified" : "stars"} size="text-[10px]" />
+                                {post.authorBadge}
+                              </span>
+                            )}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant dark:text-surface-dim mt-1">
+                            <span>{language === "en" ? "By" : "Bởi"} <span className="font-bold text-[#1ea459]">{post.authorName}</span></span>
+                            <span className="flex items-center gap-1"><Icon name="schedule" size="text-[12px]" /> {new Date(post.createdAt).toLocaleDateString("vi-VN")}</span>
+                            <span className="flex items-center gap-1"><Icon name="chat_bubble_outline" size="text-[12px]" /> {post.comments?.length || 0} bình luận</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Delete Post Button (if admin or author) */}
+                      {user && (user.role === "admin" || user.uid === post.authorId) && (
+                        <button
+                          onClick={() => handleDeletePost(post.id, post.authorId)}
+                          title={language === "en" ? "Delete post" : "Xóa bài đăng"}
+                          className="p-1.5 rounded-lg border border-outline-variant hover:bg-error-container/10 text-error hover:border-error transition-colors accessibility-focus shrink-0"
+                        >
+                          <Icon name="delete" size="text-xs" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Excerpt */}
+                    <p className="text-sm text-on-surface-variant dark:text-tertiary-fixed-dim mt-1 whitespace-pre-line">
+                      {post.content}
+                    </p>
+
+                    {/* 1-Click Support Banner for "đồng hành" support posts */}
+                    {post.board === "support" && post.subType === "đồng hành" && (
+                      <div className="bg-[#e8f7ec] dark:bg-[#198d4c]/20 border border-[#1ea459]/30 rounded-xl p-3 my-2 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div className="text-left">
+                          <div className="text-xs font-bold text-[#1ea459] dark:text-[#a0e4b9] flex items-center gap-1.5">
+                            <Icon name="handshake" size="text-sm" />
+                            {language === "en" ? "Companion Help Needed" : "Cần hỗ trợ đồng hành trực tiếp"}
+                          </div>
+                          <p className="text-[10px] text-[#198d4c] dark:text-[#a0e4b9]/80 mt-1">
+                            {language === "en"
+                              ? "This member needs help. Contact them or offer support directly below."
+                              : "Tác giả cần giúp đỡ trực tiếp. Nhấp vào nút để gửi thông tin đăng ký hỗ trợ."}
+                          </p>
+                        </div>
+                        
+                        <button
+                          onClick={() => {
+                            if (!user) {
+                              alert(language === "en" ? "Please sign in to support!" : "Vui lòng đăng nhập để đăng ký hỗ trợ!");
+                              return;
+                            }
+                            setActiveSupportPost(post);
+                          }}
+                          className="bg-[#1ea459] text-white text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-[#198d4c] transition-all shadow-sm accessibility-focus whitespace-nowrap"
+                        >
+                          {language === "en" ? "I can assist this" : "Tôi muốn hỗ trợ việc này"}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Footer: Tags & Reactions */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-2 pt-3 border-t border-outline-variant/20 gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="px-3 py-1 bg-[#fef5d4] dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 rounded-full text-xs font-bold capitalize">
+                          {post.subType}
+                        </span>
+
+                        <div className="flex gap-1.5 items-center">
+                          {/* Hug/Care */}
+                          <button
+                            onClick={() => handleReact(post.id, "care")}
+                            title={language === "en" ? "Send a Hug" : "Gửi đồng cảm"}
+                            className="px-2 py-1 rounded-full border border-teal-500/30 bg-teal-50/50 hover:bg-teal-100/50 text-teal-700 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
+                          >
+                            🫂 <span>{post.reactions?.care || 0}</span>
+                          </button>
+
+                          {/* Inspire */}
+                          <button
+                            onClick={() => handleReact(post.id, "inspire")}
+                            title={language === "en" ? "Inspiring post" : "Ngưỡng mộ nghị lực"}
+                            className="px-2 py-1 rounded-full border border-amber-500/30 bg-amber-50/50 hover:bg-amber-100/50 text-amber-700 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
+                          >
+                            🌟 <span>{post.reactions?.inspire || 0}</span>
+                          </button>
+
+                          {/* With You */}
+                          <button
+                            onClick={() => handleReact(post.id, "withYou")}
+                            title={language === "en" ? "Stand with you" : "Luôn đồng hành"}
+                            className="px-2 py-1 rounded-full border border-blue-500/30 bg-blue-50/50 hover:bg-blue-100/50 text-blue-700 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
+                          >
+                            🤝 <span>{post.reactions?.withYou || 0}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Offers count if any */}
+                      {post.offers && post.offers.length > 0 && (
+                        <span className="text-[10px] font-bold bg-[#e8f7ec] text-[#1ea459] px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Icon name="check" size="text-[10px]" />
+                          {post.offers.length} {language === "en" ? "assists offered" : "lượt đăng ký"}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Comments Section */}
+                    <div className="mt-3 pt-3 border-t border-outline-variant/20">
+                      {/* Render comments list */}
+                      {post.comments && post.comments.length > 0 && (
+                        <div className="space-y-2 mb-3 max-h-[200px] overflow-y-auto scrollbar-thin pr-2">
+                          {post.comments.map((comm, cIndex) => (
+                            <div key={comm.id || cIndex} className="text-xs bg-surface-container-low dark:bg-tertiary-container/30 rounded-xl p-3 border border-outline-variant/30">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-bold text-[11px] text-on-surface dark:text-inverse-on-surface">
+                                  {comm.authorName}
+                                </span>
+                                {comm.authorBadge && (
+                                  <span className="px-1.5 py-0.5 bg-teal-50 text-teal-800 font-bold text-[8px] rounded uppercase">
+                                    {comm.authorBadge}
+                                  </span>
+                                )}
+                                <span className="text-[9px] text-outline ml-auto">
+                                  {comm.createdAt ? new Date(comm.createdAt).toLocaleDateString("vi-VN") : ""}
+                                </span>
+                              </div>
+                              <p className="text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed">
+                                {comm.text}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Add Comment Input */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder={language === "en" ? "Write a comment..." : "Viết bình luận..."}
+                          value={commentInputs[post.id] || ""}
+                          onChange={(e) => setCommentInputs({ ...commentInputs, [post.id]: e.target.value })}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleAddComment(post.id);
+                          }}
+                          className="flex-grow bg-surface-container-lowest dark:bg-tertiary-container border border-outline-variant/60 rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-[#1ea459] theme-transition"
+                        />
+                        <button
+                          onClick={() => handleAddComment(post.id)}
+                          className="bg-surface-container-high hover:bg-surface-variant text-on-surface-variant font-bold text-xs px-3.5 py-1.5 rounded-xl transition-colors accessibility-focus active:scale-95"
+                        >
+                          {language === "en" ? "Send" : "Gửi"}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))
               )}
             </div>
           </div>
 
-          {/* Posts List */}
-          <div className="space-y-6">
-            {filteredPosts.length === 0 ? (
-              <div className="bg-surface-container dark:bg-tertiary border border-dashed border-outline-variant dark:border-outline rounded-3xl p-12 text-center theme-transition">
-                <Icon name="chat_bubble_outline" size="text-4xl" className="text-outline-variant mb-3" />
-                <p className="text-sm text-on-surface-variant font-medium">
-                  {language === "en" 
-                    ? "No posts found in this board. Be the first to start a conversation!"
-                    : "Chưa có bài viết nào trong chuyên mục này. Hãy là người đầu tiên chia sẻ!"}
-                </p>
+          {/* ─── Right Sidebar (1/3) ─── */}
+          <aside className="lg:col-span-1 space-y-6">
+            
+            {/* Featured Boards (Chủ đề nổi bật) */}
+            <div className="bg-white dark:bg-tertiary rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-outline-variant/20">
+              <h3 className="font-bold text-base text-primary-dark dark:text-inverse-primary mb-4 pb-2 border-b border-outline-variant/30">
+                {language === "en" ? "Featured Boards" : "Các Chuyên mục"}
+              </h3>
+              <div className="space-y-1">
+                {Object.entries(FORUM_BOARDS).map(([key, board]) => {
+                  const count = boardCounts[key] || 0;
+                  const isSelected = selectedBoard === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        setSelectedBoard(key);
+                        setSelectedSubType("all");
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
+                        isSelected 
+                          ? "bg-[#e8f7ec] dark:bg-tertiary-container font-bold text-[#1ea459] dark:text-inverse-primary" 
+                          : "text-on-surface hover:bg-surface-container-high dark:hover:bg-tertiary-container dark:text-inverse-on-surface"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Icon name={board.icon} size="text-sm" className={isSelected ? "text-[#1ea459]" : "text-outline"} />
+                        {language === "en" ? board.labelEn : board.labelVi}
+                      </span>
+                      <span className="text-xs bg-surface-container dark:bg-surface-container-highest px-2 py-0.5 rounded-full text-on-surface-variant font-medium">
+                        {count} bài
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
-            ) : (
-              filteredPosts.map((post) => (
-                <article
-                  key={post.id}
-                  className="glass-card rounded-3xl p-6 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  {/* Post Header */}
-                  <div className="flex justify-between items-start gap-4 mb-4">
-                    <div className="flex items-center gap-3">
-                      {/* Avatar Mock */}
-                      <div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-sm">
-                        {post.authorName.charAt(0)}
+            </div>
+
+            {/* Active Members (Thành viên tích cực) */}
+            <div className="bg-white dark:bg-tertiary rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-outline-variant/20">
+              <h3 className="font-bold text-base text-primary-dark dark:text-inverse-primary mb-4 pb-2 border-b border-outline-variant/30">
+                {language === "en" ? "Active Members" : "Thành viên tích cực"}
+              </h3>
+              <div className="space-y-4">
+                {activeMembers.length === 0 ? (
+                  <p className="text-sm text-on-surface-variant italic">Chưa có dữ liệu</p>
+                ) : (
+                  activeMembers.map((member) => (
+                    <div key={member.id} className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 shrink-0">
+                        <span className="text-lg" role="img" aria-label="avatar">🧑‍🦲</span>
                       </div>
                       <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-xs text-on-surface dark:text-inverse-on-surface">
-                            {post.authorName}
-                          </span>
-                          {/* Trust Badge */}
-                          {post.authorBadge && (
-                            <span 
-                              title={post.authorBadge}
-                              className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                                post.authorBadge === "Đại sứ Hoà Nhập"
-                                  ? "bg-teal-100 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300"
-                                  : "bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300"
-                              }`}
-                            >
-                              <Icon name={post.authorBadge === "Đại sứ Hoà Nhập" ? "verified" : "stars"} size="text-[10px]" />
-                              {post.authorBadge}
-                            </span>
-                          )}
+                        <div className="font-bold text-sm text-on-surface dark:text-inverse-on-surface">
+                          {member.name}
                         </div>
-                        <div className="text-[10px] text-on-surface-variant dark:text-tertiary-fixed-dim mt-0.5">
-                          <span className="capitalize">{post.subType}</span>
-                          <span className="mx-1.5">•</span>
-                          <span>{new Date(post.createdAt).toLocaleDateString("vi-VN")}</span>
+                        <div className="text-xs text-on-surface-variant dark:text-surface-dim">
+                          {member.count} bài viết
                         </div>
                       </div>
                     </div>
+                  ))
+                )}
+              </div>
+            </div>
 
-                    {/* Delete Post Button (if admin or author) */}
-                    {user && (user.role === "admin" || user.uid === post.authorId) && (
-                      <button
-                        onClick={() => handleDeletePost(post.id, post.authorId)}
-                        title={language === "en" ? "Delete post" : "Xóa bài đăng"}
-                        className="p-1.5 rounded-lg border border-outline hover:bg-error-container/10 text-error hover:border-error transition-colors accessibility-focus"
-                      >
-                        <Icon name="delete" size="text-xs" />
-                      </button>
-                    )}
-                  </div>
+            {/* Code of Conduct */}
+            <div className="bg-[#fef5d4] dark:bg-amber-950/20 rounded-2xl p-5 border border-amber-200 dark:border-amber-900/50">
+              <h3 className="font-bold text-sm text-amber-800 dark:text-amber-300 mb-2 flex items-center gap-2">
+                <Icon name="verified_user" size="text-sm" />
+                {language === "en" ? "Code of Conduct" : "Quy tắc diễn đàn"}
+              </h3>
+              <ul className="text-xs space-y-2 text-amber-900/80 dark:text-amber-200/70 list-disc pl-4 leading-relaxed">
+                <li>Tôn trọng và xây dựng tích cực.</li>
+                <li>Không dùng từ ngữ ban phát, thương hại.</li>
+                <li>Nghiêm cấm lừa đảo, trục lợi từ thiện.</li>
+              </ul>
+            </div>
 
-                  {/* Post Content */}
-                  <h3 className="font-bold text-base text-on-surface dark:text-inverse-on-surface mb-2.5">
-                    {post.title}
-                  </h3>
-                  <p className="text-xs text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed whitespace-pre-line mb-4">
-                    {post.content}
-                  </p>
-
-                  {/* 1-Click Support Banner for "đồng hành" support posts */}
-                  {post.board === "support" && post.subType === "đồng hành" && (
-                    <div className="bg-primary/5 dark:bg-primary-fixed/5 border border-primary/20 dark:border-primary-fixed/30 rounded-2xl p-4 mb-4 flex flex-col md:flex-row justify-between items-center gap-3">
-                      <div className="text-left">
-                        <div className="text-xs font-bold text-primary dark:text-inverse-primary flex items-center gap-1.5">
-                          <Icon name="handshake" size="text-sm" />
-                          {language === "en" ? "Companion Help Needed" : "Cần hỗ trợ đồng hành trực tiếp"}
-                        </div>
-                        <p className="text-[10px] text-on-surface-variant dark:text-tertiary-fixed-dim mt-1">
-                          {language === "en"
-                            ? "This member needs help. Contact them or offer support directly below."
-                            : "Tác giả cần giúp đỡ trực tiếp. Nhấp vào nút để gửi thông tin đăng ký hỗ trợ."}
-                        </p>
-                      </div>
-                      
-                      <button
-                        onClick={() => {
-                          if (!user) {
-                            alert(language === "en" ? "Please sign in to support!" : "Vui lòng đăng nhập để đăng ký hỗ trợ!");
-                            return;
-                          }
-                          setActiveSupportPost(post);
-                        }}
-                        className="bg-primary text-on-primary dark:bg-primary-fixed dark:text-on-primary-fixed text-[11px] font-bold px-4 py-2 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm accessibility-focus"
-                      >
-                        {language === "en" ? "I can assist this" : "Tôi muốn hỗ trợ việc này"}
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Reaction Empathy Section */}
-                  <div className="flex flex-wrap gap-2.5 items-center border-y border-outline-variant/40 py-3 mb-4">
-                    <span className="text-[10px] font-bold text-outline uppercase mr-1.5">
-                      {language === "en" ? "Sympathy:" : "Chia sẻ:"}
-                    </span>
-
-                    {/* Hug/Care */}
-                    <button
-                      onClick={() => handleReact(post.id, "care")}
-                      title={language === "en" ? "Send a Hug" : "Gửi đồng cảm"}
-                      className="px-2.5 py-1 rounded-full border border-teal-500/30 bg-teal-50/20 dark:bg-teal-950/10 hover:bg-teal-100/30 text-teal-700 dark:text-teal-400 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
-                    >
-                      🫂 <span>{post.reactions?.care || 0}</span>
-                    </button>
-
-                    {/* Inspire */}
-                    <button
-                      onClick={() => handleReact(post.id, "inspire")}
-                      title={language === "en" ? "Inspiring post" : "Ngưỡng mộ nghị lực"}
-                      className="px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-50/20 dark:bg-amber-950/10 hover:bg-amber-100/30 text-amber-700 dark:text-amber-400 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
-                    >
-                      🌟 <span>{post.reactions?.inspire || 0}</span>
-                    </button>
-
-                    {/* With You */}
-                    <button
-                      onClick={() => handleReact(post.id, "withYou")}
-                      title={language === "en" ? "Stand with you" : "Luôn đồng hành"}
-                      className="px-2.5 py-1 rounded-full border border-blue-500/30 bg-blue-50/20 dark:bg-blue-950/10 hover:bg-blue-100/30 text-blue-700 dark:text-blue-400 font-bold text-xs flex items-center gap-1 accessibility-focus transition-all"
-                    >
-                      🤝 <span>{post.reactions?.withYou || 0}</span>
-                    </button>
-
-                    {/* Count of Offers Registered */}
-                    {post.offers && post.offers.length > 0 && (
-                      <span className="ml-auto text-[10px] font-bold bg-teal-100 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Icon name="check" size="text-[10px]" />
-                        {post.offers.length} {language === "en" ? "assists offered" : "lượt đăng ký giúp đỡ"}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Comments Section */}
-                  <div className="space-y-3.5 pl-3 border-l-2 border-outline-variant/60">
-                    <h4 className="font-bold text-xs text-on-surface/85">
-                      {language === "en" ? "Discussions" : "Bình luận trao đổi"} ({post.comments?.length || 0})
-                    </h4>
-                    
-                    {/* Render comments list */}
-                    {post.comments && post.comments.map((comm, cIndex) => (
-                      <div key={comm.id || cIndex} className="text-xs bg-surface-container-high/30 dark:bg-tertiary-container/20 rounded-xl p-3">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <span className="font-bold text-[11px] text-on-surface dark:text-inverse-on-surface">
-                            {comm.authorName}
-                          </span>
-                          {comm.authorBadge && (
-                            <span className="px-1.5 py-0.2 bg-teal-50 dark:bg-teal-950/30 text-teal-800 dark:text-teal-300 font-bold text-[8px] rounded uppercase">
-                              {comm.authorBadge}
-                            </span>
-                          )}
-                          <span className="text-[9px] text-outline ml-auto">
-                            {comm.createdAt ? new Date(comm.createdAt).toLocaleDateString("vi-VN") : ""}
-                          </span>
-                        </div>
-                        <p className="text-on-surface-variant dark:text-tertiary-fixed-dim leading-relaxed">
-                          {comm.text}
-                        </p>
-                      </div>
-                    ))}
-
-                    {/* Add Comment Input */}
-                    <div className="flex gap-2 mt-3">
-                      <input
-                        type="text"
-                        placeholder={language === "en" ? "Write a comment..." : "Viết bình luận..."}
-                        value={commentInputs[post.id] || ""}
-                        onChange={(e) => setCommentInputs({ ...commentInputs, [post.id]: e.target.value })}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") handleAddComment(post.id);
-                        }}
-                        className="flex-grow bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary theme-transition placeholder-gray-400 dark:placeholder-gray-300"
-                      />
-                      <button
-                        onClick={() => handleAddComment(post.id)}
-                        className="bg-primary text-on-primary font-bold text-xs px-3.5 py-1.5 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-colors accessibility-focus active:scale-95"
-                      >
-                        {language === "en" ? "Send" : "Gửi"}
-                      </button>
-                    </div>
-                  </div>
-
-                </article>
-              ))
-            )}
-          </div>
-        </main>
+          </aside>
+        </div>
       </div>
 
       {/* ─── MODAL 1: Write New Post ─── */}

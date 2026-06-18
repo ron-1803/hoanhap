@@ -25,11 +25,11 @@
 - Focus management and semantic HTML are strictly enforced across all components.
 
 ### Core Modules
-1. **Rights & Policies (`RightsPage.jsx`)**: Displays policies/legal rights for PWDs.
-2. **Allowance Calculator (`AllowancePage.jsx`)**: Calculates government social subsidies based on user inputs.
-3. **Community Hub (`CommunityPage.jsx` & `ForumPage.jsx`)**: A unified hub containing the Forum (Discussions) and Connection Offers (Help requests/offers).
-4. **Accessible Map (`MapPage.jsx`)**: Displays accessible facilities (hospitals, rehab centers) using `react-leaflet`.
-5. **Admin Dashboard (`AdminPage.jsx`)**: Protected route for admins to manage users, assign badges, moderate forum posts, and manage map locations.
+- **Rights/Allowance Directory**: A highly accessible directory (`RightsPage.jsx`) where users can filter benefits. Replaced direct file downloads with informative cards featuring "Xem chi tiết" buttons that link to external legal texts, managed dynamically via Firebase by admins.
+- **Interactive Support Map (`MapPage.jsx`)**: Uses `react-leaflet` to display support centers. Currently, it integrates with `Overpass API` to fetch real-world amenities dynamically, resolving CORS by removing headers.
+- **Community Hub (`CommunityPage.jsx` & `ForumPage.jsx` & `ConnectionPage.jsx`)**: A unified hub. The Forum (`ForumPage.jsx`) features a professional 2-column layout (Left: Posts & Subtype Filters; Right: Featured Boards & Active Members widgets) matching modern forum patterns with high accessibility. `ConnectionPage.jsx` serves as a quick directory for help requests/offers.
+- **Global TTS Welcome Flow**: Voice assistance is enabled by default (`screenReader: true`). Upon a user's first physical interaction (click, keydown, touch) on any page, a global welcome message ("Chào mừng bạn đến với Cổng thông tin Hoà Nhập...") is spoken automatically, unlocking the browser's audio context seamlessly.
+- **Admin Panel (`AdminPage.jsx`)**: Comprehensive dashboard to manage users (approving roles, assigning trust badges) and content. Recently redesigned using the Glass Card UI with updated forms to accept external URLs instead of file uploads for legal documents.
 
 ### Global State & Contexts
 - **`AuthContext.jsx`**: Firebase Auth listener.
@@ -85,66 +85,68 @@ The app uses Firebase Firestore. Below are the primary collections:
 To build and deploy the application to Cloudflare Pages:
 1. Run `npm run build`.
 2. Run `npx wrangler pages deploy dist --project-name hoanhap`.
+---
+
+## 7. Visual Upgrade (Completed)
+
+**Status:** ĐÃ HOÀN THÀNH  
+**Mục tiêu:** Nâng cấp toàn bộ visual của website lên phong cách **Modern & Premium** (glassmorphism, gradient, micro-animations) theo chuẩn **WCAG 2.2 AA**.
+
+### Các CSS utility classes đã thêm (`src/index.css`)
+| Class | Mô tả |
+|-------|--------|
+| `.glass-card` | Glassmorphism card (backdrop-blur, semi-transparent bg, subtle border). Tự động fallback solid bg trong `.high-contrast` mode. |
+| `.glass-header` | Glassmorphism cho header/sticky bar. |
+| `.shadow-premium` | Multi-layer box-shadow tinh tế. |
+| `.bg-dots-pattern` | Subtle decorative dot pattern cho page backgrounds. |
+| `.footer-gradient` | Gradient background cho Footer. |
+
+### Nguyên tắc WCAG 2.2 đã áp dụng
+- Tất cả decorative animations đều được wrap trong `@media (prefers-reduced-motion: no-preference)`.
+- Focus indicators duy trì `ring-offset-2` trên glass/dark surfaces (3-4px offset).
+- `.high-contrast` class tự động override glass effects thành solid backgrounds.
+
+### Components & Pages đã nâng cấp
+- **Layout:** `Header.jsx`, `Footer.jsx`, `AccessibilitySidebar.jsx`
+- **UI Components:** `ServiceCard.jsx`, `Button.jsx`
+- **Trang chính:** `HomePage.jsx`, `RightsPage.jsx`, `SocialAllowancePage.jsx`, `CommunityPage.jsx`, `ConnectionPage.jsx`, `ForumPage.jsx`, `MapPage.jsx`
+
+---
+
+## 8. Recent Feature Changes
+
+### 8.1 Legal Documents — Direct Links (thay vì tải file)
+Do tính đặc thù thay đổi luật thường xuyên, hệ thống đã chuyển từ việc tải file tĩnh sang **liên kết trực tiếp** đến nguồn gốc văn bản pháp luật.
+
+**Các file đã sửa:**
+- **`AdminPage.jsx`** (Tab "Quyền lợi & Văn bản"):
+  - Label "Đường dẫn tệp tài liệu" → "Liên kết trực tiếp đến dự thảo/văn bản"
+  - Placeholder hướng dẫn nhập URL (ví dụ: `https://thuvienphapluat.vn/...`)
+  - Bảng danh sách: cột "Liên kết tệp" → "Liên kết gốc"
+- **`RightsPage.jsx`** (Section "Văn bản pháp luật liên quan"):
+  - Nút "Tải PDF/DOC" (download) → Nút "Xem chi tiết" (`open_in_new`, `target="_blank"`)
+  - Mock URLs cập nhật sang liên kết thực trên thuvienphapluat.vn
+
+### 8.2 Screen Reader (TTS) bật mặc định
+Chức năng đọc nội dung (Text-to-Speech) được **bật sẵn** cho người dùng mới (lần đầu truy cập).
+
+**File đã sửa:** `AccessibilityContext.jsx`
+- `defaultState.screenReader` = `true` (trước đó là `false`).
+- Người dùng cũ đã có localStorage sẽ giữ nguyên lựa chọn đã lưu.
+
+**Xử lý browser autoplay policy:**
+- Trình duyệt chặn phát âm thanh cho đến khi có tương tác đầu tiên (click/keydown/touchstart).
+- Hệ thống lắng nghe sự kiện tương tác đầu tiên, sau đó phát lời chào hướng dẫn:  
+  *"Chào mừng bạn đến với Hoà Nhập. Chức năng đọc nội dung đã được bật sẵn. Hãy di chuột hoặc dùng phím Tab để nghe nội dung từng mục."*
+- Logic: `hasPlayedWelcome` ref đảm bảo chỉ phát 1 lần duy nhất mỗi session.
+
+---
+
+## 9. Deployment Workflow
+
+To build and deploy the application to Cloudflare Pages:
+1. Run `npm run build`.
+2. Run `npx wrangler pages deploy dist --project-name hoanhap`.
 3. Push changes to GitHub (`git add .`, `git commit -m "..."`, `git push`).
-
----
-
-## 7. Planned Visual Upgrade (TODO)
-
-**Status:** Chưa thực hiện — Chỉ là kế hoạch để thực hiện sau.  
-**Mục tiêu:** Nâng cấp toàn bộ visual của website lên phong cách **Modern & Premium** (glassmorphism, gradient mesh, micro-animations) mà **KHÔNG thay đổi bố cục, logic, hay accessibility features**.
-
-### Nguyên tắc
-- Giữ nguyên layout/structure hiện tại
-- Giữ nguyên 100% tính năng accessibility (WCAG 2.2 AA, TTS, high contrast, keyboard nav)
-- Chỉ thay đổi CSS classes và visual styling trong JSX
-
-### Các thay đổi chính
-
-#### A. Global CSS (`src/index.css`)
-Thêm các CSS classes mới:
-- `.glass-card` — Glassmorphism cards (backdrop-blur, semi-transparent bg, subtle borders)
-- `.gradient-border` — Animated gradient borders cho cards khi hover
-- `.ambient-glow` — Subtle color glow phía sau cards
-- `.shadow-premium` — Multi-layer box-shadow tinh tế
-- `.bg-dots-pattern`, `.bg-grid-pattern` — Subtle decorative backgrounds
-- `.btn-glow` — Glow effect khi hover buttons
-- `.animate-scroll-reveal` — Scroll-triggered reveal animation
-- `.card-shine` — Sweep shine effect khi hover cards
-
-#### B. Components (4 files)
-| File | Upgrade |
-|------|---------|
-| `Header.jsx` | Stronger backdrop-blur, gradient bottom line, sliding nav underline, glassmorphism dropdowns |
-| `Footer.jsx` | Mesh gradient bg, subtle particles, glow links, gradient divider |
-| `ServiceCard.jsx` | Glassmorphism bg, gradient border hover, icon glow, card shine sweep |
-| `Button.jsx` | Gradient bg + shimmer, hover glow, dark mode neon borders |
-
-#### C. Pages (12+ files)
-Apply consistent visual pattern across all pages:
-
-| Element | Hiện tại | Nâng cấp |
-|---------|----------|----------|
-| Card backgrounds | `bg-surface-container` solid | `backdrop-blur-xl bg-white/70 dark:bg-white/5` |
-| Card borders | `border-2 border-outline-variant` | `border border-white/20` + gradient on hover |
-| Card shadows | `shadow-sm` hoặc none | `shadow-lg shadow-primary/5` + ambient glow |
-| Hero sections | Single color + image | Multi-layer gradient mesh + floating shapes |
-| Buttons (primary) | `bg-primary` solid | Gradient `from-primary to-primary-container` + shimmer |
-| Dark mode cards | `bg-tertiary` solid | `bg-white/5 backdrop-blur` + glow borders |
-| Page backgrounds | Plain white/dark | Subtle dot/grid patterns |
-| Hover effects | `hover:border-primary` | Lift + glow + gradient border animation |
-
-#### D. Priority Order (khi thực hiện)
-1. `index.css` — Thêm tất cả CSS classes mới
-2. `ServiceCard.jsx`, `Button.jsx` — Components chung
-3. `HomePage.jsx` — Trang chủ
-4. `RightsPage.jsx`, `SocialAllowancePage.jsx` — Trang chính
-5. `Header.jsx`, `Footer.jsx` — Layout
-6. Các trang còn lại
-
-### Cách thực hiện
-Yêu cầu AI agent: *"Thực hiện visual upgrade plan trong section 7 của PROJECT_CONTEXT.md"*
-
----
 
 *End of Context Document.*
