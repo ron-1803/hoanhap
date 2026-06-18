@@ -38,7 +38,7 @@ const defaultState = {
   fontScale: 1.0,
   darkMode: false,
   highContrast: false,
-  screenReader: false,
+  screenReader: true,
   keyboardNav: false,
 };
 
