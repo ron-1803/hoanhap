@@ -319,11 +319,45 @@ export function AccessibilityProvider({ children }) {
   );
 
   const wasScreenReaderOn = useRef(state?.screenReader);
+  const hasPlayedWelcome = useRef(false);
+
+  // Announce when user manually toggles screen reader ON
   useEffect(() => {
     if (state?.screenReader && !wasScreenReaderOn.current) {
       speakText("Đã bật đọc nội dung bằng giọng nói.", true);
+      hasPlayedWelcome.current = true;
     }
     wasScreenReaderOn.current = !!state?.screenReader;
+  }, [state?.screenReader, speakText]);
+
+  // When screenReader is ON from the start (default), browsers block audio
+  // until first user gesture. Listen for first interaction, then speak welcome.
+  useEffect(() => {
+    if (!state?.screenReader || hasPlayedWelcome.current) return;
+
+    const handleFirstInteraction = () => {
+      if (hasPlayedWelcome.current) return;
+      hasPlayedWelcome.current = true;
+      // Small delay to let the browser fully unlock audio
+      setTimeout(() => {
+        if (stateRef.current?.screenReader) {
+          speakText("Chào mừng bạn đến với Hoà Nhập. Chức năng đọc nội dung đã được bật sẵn. Hãy di chuột hoặc dùng phím Tab để nghe nội dung từng mục.", true);
+        }
+      }, 300);
+      cleanup();
+    };
+
+    const cleanup = () => {
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("keydown", handleFirstInteraction);
+      document.removeEventListener("touchstart", handleFirstInteraction);
+    };
+
+    document.addEventListener("click", handleFirstInteraction, { once: true });
+    document.addEventListener("keydown", handleFirstInteraction, { once: true });
+    document.addEventListener("touchstart", handleFirstInteraction, { once: true });
+
+    return cleanup;
   }, [state?.screenReader, speakText]);
 
   // ── Dispatch helpers ──────────────────────────────────────────
