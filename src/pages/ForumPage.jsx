@@ -239,6 +239,34 @@ export default function ForumPage({ isTab = false }) {
     }
   };
 
+  // Like a comment
+  const handleLikeComment = async (postId, commentId) => {
+    if (!user) {
+      alert(language === "en" ? "Please log in to react!" : "Vui lòng đăng nhập để bày tỏ cảm xúc!");
+      return;
+    }
+    const post = posts.find((p) => p.id === postId);
+    if (!post || !post.comments) return;
+
+    const commentIndex = post.comments.findIndex(c => c.id === commentId);
+    if (commentIndex === -1) return;
+
+    const updatedComments = [...post.comments];
+    updatedComments[commentIndex] = {
+      ...updatedComments[commentIndex],
+      likes: (updatedComments[commentIndex].likes || 0) + 1
+    };
+
+    try {
+      const postRef = doc(db, "forum_posts", postId);
+      await updateDoc(postRef, {
+        comments: updatedComments
+      });
+    } catch (err) {
+      console.error("Failed to like comment:", err);
+    }
+  };
+
   // Submit support offer
   const handleRegisterSupport = async (e) => {
     e.preventDefault();
@@ -577,7 +605,10 @@ export default function ForumPage({ isTab = false }) {
                                   {comm.text}
                                 </p>
                                 <div className="flex items-center gap-4 text-xs text-outline font-medium">
-                                  <button className="flex items-center gap-1 hover:text-primary dark:hover:text-primary-fixed transition-colors accessibility-focus">
+                                  <button 
+                                    onClick={() => handleLikeComment(post.id, comm.id)}
+                                    className="flex items-center gap-1 hover:text-primary dark:hover:text-primary-fixed transition-colors accessibility-focus"
+                                  >
                                     <Icon name="thumb_up" size="text-[14px]" /> {comm.likes || 0}
                                   </button>
                                   <button 
