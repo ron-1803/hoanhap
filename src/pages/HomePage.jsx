@@ -5,6 +5,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import SearchBar from "../components/ui/SearchBar";
 import ServiceCard from "../components/ui/ServiceCard";
 import GuideVideoSection from "../components/home/GuideVideoSection";
+import WelcomeGuideModal from "../components/home/WelcomeGuideModal";
 
 const SERVICES = [
   {
@@ -62,6 +63,7 @@ export default function HomePage() {
 
   return (
     <>
+      <WelcomeGuideModal />
       {/* ═══ Hero Section with Gradient Mesh ═══ */}
       <section
         aria-labelledby="hero-heading"
