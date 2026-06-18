@@ -6,43 +6,42 @@ import SearchBar from "../components/ui/SearchBar";
 import ServiceCard from "../components/ui/ServiceCard";
 import GuideVideoSection from "../components/home/GuideVideoSection";
 
-const IMAGE_SOURCES = {
-  rights:
-    "https://images.pexels.com/photos/7875785/pexels-photo-7875785.jpeg?auto=compress&cs=tinysrgb&w=800",
-  allowance:
-    "https://images.pexels.com/photos/6863260/pexels-photo-6863260.jpeg?auto=compress&cs=tinysrgb&w=800",
-  connection:
-    "https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=800",
-  map:
-    "https://images.pexels.com/photos/5921677/pexels-photo-5921677.jpeg?auto=compress&cs=tinysrgb&w=800",
-  feedback:
-    "https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=600",
-};
-
 const SERVICES = [
   {
     to: "/quyen-loi",
     titleKey: "service_rights_title",
     descKey: "service_rights_desc",
-    imageSrc: IMAGE_SOURCES.rights,
+    icon: "gavel",
+    iconBg: "bg-blue-50 dark:bg-blue-950/30",
+    iconColor: "text-blue-600 dark:text-blue-400",
+    iconBorder: "border-blue-200 dark:border-blue-800",
   },
   {
     to: "/tro-cap",
     titleKey: "service_allowance_title",
     descKey: "service_allowance_desc",
-    imageSrc: IMAGE_SOURCES.allowance,
+    icon: "calculate",
+    iconBg: "bg-emerald-50 dark:bg-emerald-950/30",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    iconBorder: "border-emerald-200 dark:border-emerald-800",
   },
   {
     to: "/ket-noi",
     titleKey: "service_connection_title",
     descKey: "service_connection_desc",
-    imageSrc: IMAGE_SOURCES.connection,
+    icon: "diversity_3",
+    iconBg: "bg-amber-50 dark:bg-amber-950/30",
+    iconColor: "text-amber-600 dark:text-amber-400",
+    iconBorder: "border-amber-200 dark:border-amber-800",
   },
   {
     to: "/ban-do",
     titleKey: "service_map_title",
     descKey: "service_map_desc",
-    imageSrc: IMAGE_SOURCES.map,
+    icon: "map",
+    iconBg: "bg-rose-50 dark:bg-rose-950/30",
+    iconColor: "text-rose-600 dark:text-rose-400",
+    iconBorder: "border-rose-200 dark:border-rose-800",
   },
 ];
 
@@ -151,10 +150,13 @@ export default function HomePage() {
             <div key={service.to} className={`animate-fade-up stagger-${i + 1}`}>
               <ServiceCard
                 to={service.to}
+                icon={service.icon}
                 title={t(service.titleKey)}
                 description={t(service.descKey)}
                 ariaLabel={t(service.titleKey)}
-                imageSrc={service.imageSrc}
+                iconBg={service.iconBg}
+                iconColor={service.iconColor}
+                iconBorder={service.iconBorder}
               />
             </div>
           ))}
