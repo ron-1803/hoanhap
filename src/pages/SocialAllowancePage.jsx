@@ -155,7 +155,7 @@ export default function SocialAllowancePage() {
 
 
   return (
-    <div className="flex-1 bg-surface-container-lowest dark:bg-tertiary/20 theme-transition pb-24 animate-[fadeIn_0.2s_ease-out]">
+    <div className="flex-1 bg-surface-container-lowest dark:bg-[#1c1f26] bg-dots-pattern theme-transition pb-24 animate-[fadeIn_0.2s_ease-out]">
       {/* ─── Hero Section ─── */}
       <section className="relative w-full min-h-[260px] flex items-center bg-primary-container dark:bg-primary-fixed border-b-2 border-primary overflow-hidden">
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-20 mix-blend-overlay">
@@ -196,7 +196,7 @@ export default function SocialAllowancePage() {
         {/* ─── Cột 1 & 2: Calculator & Procedures ─── */}
         <div className="lg:col-span-2 space-y-10">
           {/* Section: Calculator */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 md:p-8 shadow-sm theme-transition">
+          <div className="glass-card rounded-3xl p-6 md:p-8">
             <h2 className="font-headline-md text-headline-md text-primary dark:text-inverse-primary mb-6 flex items-center gap-3">
               <Icon name="calculate" className="text-primary dark:text-inverse-primary" />
               {t("allowance_calc_title")}
@@ -299,7 +299,7 @@ export default function SocialAllowancePage() {
           </div>
 
           {/* Section: Procedures Guide */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 md:p-8 shadow-sm theme-transition">
+          <div className="glass-card rounded-3xl p-6 md:p-8">
             <h2 className="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface mb-6 flex items-center gap-3">
               <Icon name="assignment" className="text-primary dark:text-inverse-primary" />
               {t("allowance_proc_title")}
@@ -380,7 +380,7 @@ export default function SocialAllowancePage() {
         {/* ─── Cột 3: Documents Checklist & Locations ─── */}
         <div className="space-y-10">
           {/* Section: Checklist */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 shadow-sm theme-transition">
+          <div className="glass-card rounded-3xl p-6">
             <h2 className="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mb-4 flex items-center gap-2">
               <Icon name="fact_check" className="text-primary" />
               {t("allowance_docs_title")}
@@ -468,7 +468,7 @@ export default function SocialAllowancePage() {
           </div>
 
           {/* Section: Welfare Office Locations */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 shadow-sm theme-transition">
+          <div className="glass-card rounded-3xl p-6">
             <h2 className="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mb-6 flex items-center gap-2">
               <Icon name="location_on" className="text-primary" />
               {t("allowance_office_title")}

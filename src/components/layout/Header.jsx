@@ -122,7 +122,7 @@ export default function Header() {
               className={({ isActive }) =>
                 `font-semibold text-label-lg px-3 py-2 rounded-lg
                  transition-all duration-150 active:scale-95
-                 focus-visible:ring-4 focus-visible:ring-primary
+                 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
                  ${
                    isActive
                      ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed"
@@ -159,8 +159,8 @@ export default function Header() {
 
             {langOpen && (
               <div
-                className="absolute right-0 mt-2 w-48 bg-surface dark:bg-tertiary-container
-                           border-2 border-outline-variant dark:border-outline rounded-xl shadow-lg py-2 z-50
+                className="absolute right-0 mt-2 w-48 glass-card
+                           rounded-xl shadow-lg py-2 z-50
                            animate-[slideUp_0.15s_ease-out]"
                 role="menu"
                 aria-label="Menu chọn ngôn ngữ"
@@ -223,8 +223,8 @@ export default function Header() {
 
             {notifOpen && (
               <div
-                className="absolute right-0 mt-2 w-80 bg-surface dark:bg-tertiary-container
-                           border-2 border-outline-variant dark:border-outline rounded-2xl shadow-xl py-2 z-50
+                className="absolute right-0 mt-2 w-80 glass-card
+                           rounded-2xl shadow-xl py-2 z-50
                            animate-[slideUp_0.15s_ease-out]"
                 role="menu"
                 aria-label="Bảng thông báo"
@@ -295,8 +295,8 @@ export default function Header() {
 
               {profileOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-56 bg-surface dark:bg-tertiary-container
-                             border-2 border-outline-variant dark:border-outline rounded-xl shadow-lg py-2 z-50
+                  className="absolute right-0 mt-2 w-56 glass-card
+                             rounded-xl shadow-lg py-2 z-50
                              animate-[slideUp_0.15s_ease-out]"
                   role="menu"
                   aria-label="Menu tài khoản cá nhân"
@@ -394,8 +394,8 @@ export default function Header() {
         <nav
           id="mobile-nav-menu"
           aria-label="Menu điều hướng di động"
-          className="md:hidden border-t-2 border-outline-variant dark:border-outline
-                     bg-surface dark:bg-tertiary
+          className="md:hidden border-t border-outline-variant/40 dark:border-white/10
+                     glass-header
                      px-4 py-4 space-y-2
                      animate-[slideUp_0.2s_ease-out]"
         >

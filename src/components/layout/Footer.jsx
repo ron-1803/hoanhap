@@ -18,12 +18,13 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-[#111318] dark:bg-[#0a0c10]
+      className="footer-gradient bg-dots-pattern relative overflow-hidden
                  text-gray-400 w-full mt-auto
                  border-t border-white/5 theme-transition"
     >
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-primary/10 blur-[100px] pointer-events-none" />
       <div
-        className="max-w-[1440px] mx-auto px-4 md:px-margin-desktop
+        className="max-w-[1440px] mx-auto px-4 md:px-margin-desktop relative z-10
                    py-12 md:py-16"
       >
         {/* ── Top: Brand + Links ── */}

@@ -356,7 +356,7 @@ export default function ForumPage({ isTab = false }) {
         <main className="lg:col-span-3 space-y-6">
           
           {/* Sub-type Filters & Search Bar */}
-          <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-4 shadow-sm theme-transition flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="glass-card rounded-3xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Sub-type Horizontal Buttons */}
             <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-thin">
               {FORUM_BOARDS[selectedBoard].subTypes.map((type) => (
@@ -419,7 +419,7 @@ export default function ForumPage({ isTab = false }) {
               filteredPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-3xl p-6 shadow-sm hover:shadow-md transition-all theme-transition"
+                  className="glass-card rounded-3xl p-6 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                   {/* Post Header */}
                   <div className="flex justify-between items-start gap-4 mb-4">

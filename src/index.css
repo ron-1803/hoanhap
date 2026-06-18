@@ -130,12 +130,17 @@ html.high-contrast li {
 /* Force buttons to have black background and white border */
 html.high-contrast button,
 html.high-contrast a.btn,
-html.high-contrast .button {
+html.high-contrast .button,
+html.high-contrast .glass-card,
+html.high-contrast .gradient-border,
+html.high-contrast .ambient-glow {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
   background-image: none !important;
   box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Hover and focus states for links and buttons - neon yellow */
@@ -326,16 +331,18 @@ html.high-contrast svg path {
   75%      { transform: translate(-15px, -10px) rotate(1deg); }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
 
-.animate-float-reverse {
-  animation: float-reverse 7s ease-in-out infinite;
-}
+  .animate-float-reverse {
+    animation: float-reverse 7s ease-in-out infinite;
+  }
 
-.animate-float-slow {
-  animation: float-slow 10s ease-in-out infinite;
+  .animate-float-slow {
+    animation: float-slow 10s ease-in-out infinite;
+  }
 }
 
 /* ── Shimmer / shine sweep for CTA buttons ── */
@@ -360,7 +367,12 @@ html.high-contrast svg path {
     rgba(255, 255, 255, 0.25) 50%,
     transparent 60%
   );
-  animation: shimmer 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shimmer-btn::after {
+    animation: shimmer 3s ease-in-out infinite;
+  }
 }
 
 /* ── Service card premium hover effects ── */
@@ -380,10 +392,19 @@ html.high-contrast svg path {
   transition: opacity 0.3s ease;
 }
 
-.service-card:hover::before,
-.service-card:focus-visible::before {
-  opacity: 1;
-  animation: gradient-slide 2s linear infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .service-card:hover::before,
+  .service-card:focus-visible::before {
+    opacity: 1;
+    animation: gradient-slide 2s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card:hover::before,
+  .service-card:focus-visible::before {
+    opacity: 1;
+  }
 }
 
 @keyframes gradient-slide {
@@ -402,6 +423,53 @@ html.high-contrast svg path {
   box-shadow:
     0 8px 30px rgba(176, 198, 255, 0.08),
     0 2px 10px rgba(176, 198, 255, 0.04);
+}
+
+/* ── Premium UI Classes (WCAG Compliant) ── */
+
+/* Glassmorphism Cards */
+.glass-card {
+  @apply bg-white/80 dark:bg-[#1c1f26]/80 backdrop-blur-xl border border-outline-variant/40 dark:border-white/10 shadow-premium transition-all duration-300;
+}
+
+/* Premium Shadows */
+.shadow-premium {
+  box-shadow: 0 10px 40px -10px rgba(0, 43, 107, 0.08), 
+              0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.dark .shadow-premium {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 
+              0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Background Patterns */
+.bg-dots-pattern {
+  background-image: radial-gradient(rgba(0, 43, 107, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.dark .bg-dots-pattern {
+  background-image: radial-gradient(rgba(176, 198, 255, 0.1) 1px, transparent 1px);
+}
+
+/* Scroll Reveal */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .animate-scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ── Glassmorphism header ── */

@@ -49,7 +49,7 @@ export default function AccessibilitySidebar() {
       <aside
         aria-label={language === "en" ? "Accessibility Toolbar" : "Thanh công cụ trợ năng"}
         className="accessibility-sidebar fixed left-0 top-0 h-full w-sidebar-width z-50
-                   bg-surface-container-lowest dark:bg-[#111318]
+                   glass-header
                    border-r border-outline-variant/30 dark:border-white/5
                    shadow-xl shadow-black/[0.03]
                    flex flex-col items-center py-6 space-y-2

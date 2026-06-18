@@ -36,16 +36,10 @@ export default function ServiceCard({
     <Link
       to={to}
       aria-label={ariaLabel || `${title}: ${description}`}
-      className="service-card group
-                 bg-surface-container-lowest dark:bg-inverse-surface
-                 border border-outline-variant/50
-                 dark:border-outline/30
-                 hover:border-primary/30 dark:hover:border-inverse-primary/30
+      className="service-card glass-card group
                  rounded-2xl p-8 flex flex-col items-start gap-6
-                 transition-all duration-300
-                 focus-visible:ring-4 focus-visible:ring-primary
-                 theme-transition
-                 hover:-translate-y-1"
+                 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container-lowest
+                 theme-transition hover:-translate-y-1"
     >
       {/* Icon container */}
       <div

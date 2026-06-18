@@ -19,7 +19,7 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="flex-1 bg-surface-container-lowest dark:bg-tertiary/20 theme-transition flex flex-col">
+    <div className="flex-1 bg-surface-container-lowest dark:bg-[#1c1f26] bg-dots-pattern theme-transition flex flex-col">
       {/* ─── Hero Section ─── */}
       <section className="relative w-full min-h-[300px] flex items-center bg-primary-container dark:bg-primary-fixed border-b-2 border-primary overflow-hidden">
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-overlay">

@@ -190,8 +190,8 @@ export default function SupportMapPage() {
     <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-gray-50 dark:bg-gray-900 overflow-hidden">
       
       {/* ── LEFT SIDEBAR ── */}
-      <div className="w-full lg:w-[400px] bg-white dark:bg-gray-800 flex flex-col shadow-xl z-10">
-        <div className="p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 z-10 shadow-sm relative">
+      <div className="w-full lg:w-[400px] bg-surface-container-lowest dark:bg-[#1c1f26] flex flex-col shadow-premium z-10 border-r border-outline-variant/30">
+        <div className="p-4 border-b border-outline-variant/50 glass-header z-10 shadow-sm relative">
           <h1 className="text-xl font-bold text-gray-800 dark:text-white mb-1">Bản đồ hỗ trợ tiếp cận</h1>
           <p className="text-xs text-gray-500 mb-4">Dữ liệu thực tế từ OpenStreetMap</p>
           
@@ -275,7 +275,7 @@ export default function SupportMapPage() {
                     }}
                     tabIndex={0}
                     role="article"
-                    className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-3 cursor-pointer hover:shadow-md hover:border-primary/50 transition-all group accessibility-focus"
+                    className="glass-card rounded-xl p-3 cursor-pointer hover:-translate-y-1 transition-all group focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
                   >
                     <h3 className="font-semibold text-sm text-gray-800 dark:text-white group-hover:text-primary transition-colors line-clamp-1">
                       {loc.name}

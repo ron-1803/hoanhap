@@ -415,7 +415,7 @@ export default function ConnectionPage({ isTab = false }) {
       <section id="search-section" className={`max-w-[1440px] mx-auto px-gutter relative z-20 ${!isTab ? "-mt-20 md:-mt-24 mb-12" : "py-8"}`}>
         <form
           onSubmit={handleFilterSubmit}
-          className="bg-surface/80 dark:bg-tertiary/80 backdrop-blur-xl border border-white/40 dark:border-outline-variant/30 rounded-3xl p-6 md:p-8 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] flex flex-col md:flex-row items-end gap-6 theme-transition"
+          className="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-end gap-6 theme-transition"
         >
           {/* Text Input Search */}
           <div className="w-full md:w-1/3">
@@ -526,7 +526,7 @@ export default function ConnectionPage({ isTab = false }) {
             {paginatedConnections.map((conn) => (
               <div
                 key={conn.id}
-                className="group bg-surface-container-lowest dark:bg-tertiary border border-outline-variant/40 dark:border-outline-variant/20 rounded-[2rem] p-6 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 hover:border-primary/30 transition-all duration-300 flex flex-col justify-between theme-transition relative overflow-hidden"
+                className="glass-card group rounded-[2rem] p-6 hover:-translate-y-2 flex flex-col justify-between relative overflow-hidden focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 {/* Decorative background gradient */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full pointer-events-none transition-transform duration-500 group-hover:scale-110"></div>

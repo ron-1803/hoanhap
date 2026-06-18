@@ -423,7 +423,7 @@ export default function RightsPage() {
   };
 
   return (
-    <div className="flex-1 bg-surface-container-lowest dark:bg-tertiary/20 pb-24 theme-transition">
+    <div className="flex-1 bg-surface-container-lowest dark:bg-[#1c1f26] bg-dots-pattern pb-24 theme-transition">
       {/* ─── Hero Section ─── */}
       <section className="relative w-full min-h-[340px] flex items-center bg-primary-container dark:bg-primary-fixed border-b-2 border-primary overflow-hidden">
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-overlay">
@@ -446,8 +446,8 @@ export default function RightsPage() {
       </section>
 
       {/* ─── Smart Filters Panel ─── */}
-      <section id="filters-section" className="max-w-[1440px] mx-auto px-gutter py-8">
-        <div className="bg-surface-container dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 shadow-sm flex flex-col gap-6 theme-transition">
+      <section id="filters-section" className="max-w-[1440px] mx-auto px-gutter py-8 relative z-10">
+        <div className="glass-card rounded-2xl p-6 flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Keyword Search */}
             <div className="flex flex-col">
@@ -585,7 +585,7 @@ export default function RightsPage() {
                     onFocus={() => handleSpeakItem(`${pol.name}. Thuộc nhóm: ${pol.category}. Mô tả: ${pol.description}`)}
                     tabIndex={0}
                     role="button"
-                    className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-2xl p-6 hover:border-primary dark:hover:border-inverse-primary transition-all duration-200 shadow-sm flex flex-col justify-between text-left theme-transition group focus-visible:ring-4 focus-visible:ring-primary"
+                    className="glass-card rounded-2xl p-6 hover:border-primary/50 dark:hover:border-inverse-primary/50 hover:-translate-y-1 flex flex-col justify-between text-left group focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
                   >
                     <div>
                       <div className="flex justify-between items-start mb-4">
@@ -703,7 +703,7 @@ export default function RightsPage() {
                 key={doc.id}
                 onFocus={() => handleSpeakItem(`${doc.title}. ${doc.date}`)}
                 tabIndex={0}
-                className="bg-surface-container-lowest dark:bg-tertiary border-2 border-outline-variant dark:border-outline rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 theme-transition hover:border-primary transition-all"
+                className="glass-card rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/50 dark:hover:border-inverse-primary/50 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <div className="max-w-2xl">
                   <h3 className="font-bold text-sm md:text-base text-on-surface dark:text-inverse-on-surface mb-1">
