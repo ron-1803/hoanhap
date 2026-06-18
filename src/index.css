@@ -263,13 +263,13 @@ html.highlight-links a[href]:not(.skip-link) {
   text-decoration-thickness: 0.14em !important;
   text-underline-offset: 0.18em !important;
   text-decoration-color: currentColor !important;
-  box-shadow: inset 0 -0.42em 0 rgba(255, 215, 0, 0.28);
+  box-shadow: inset 0 -0.42em 0 rgba(255, 215, 0, 0.38);
   border-radius: 0.2rem;
 }
 
 html.highlight-links a[href]:not(.skip-link):hover,
 html.highlight-links a[href]:not(.skip-link):focus-visible {
-  box-shadow: inset 0 -0.85em 0 rgba(255, 215, 0, 0.45);
+  box-shadow: inset 0 -0.85em 0 rgba(255, 215, 0, 0.55);
 }
 
 html.dark.highlight-links a[href]:not(.skip-link) {
