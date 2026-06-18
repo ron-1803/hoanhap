@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAccessibility } from "../contexts/AccessibilityContext";
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 // ── Định nghĩa danh mục & Thẻ API OSM ──
 const CATEGORIES = [
@@ -106,8 +108,9 @@ export default function SupportMapPage() {
   const loadData = useCallback(async (lat, lng) => {
     setIsLoading(true);
     try {
+      // 1. Fetch from Overpass API
       const elements = await fetchPOIs(lat, lng);
-      const parsedLocations = elements.map((el) => {
+      const parsedApiLocations = elements.map((el) => {
         const elLat = el.lat ?? el.center?.lat;
         const elLon = el.lon ?? el.center?.lon;
         if (!elLat || !elLon) return null;
@@ -116,20 +119,50 @@ export default function SupportMapPage() {
         const categoryDef = CATEGORIES.find(c => c.id === categoryId);
         
         return {
-          id: el.id,
+          id: el.id.toString(),
           name: el.tags?.name || el.tags?.["name:vi"] || categoryDef?.label || "Không rõ tên",
           type: categoryId,
           lat: elLat,
           lng: elLon,
           distance: haversineKm(lat, lng, elLat, elLon),
           address: el.tags?.["addr:full"] || [el.tags?.["addr:housenumber"], el.tags?.["addr:street"]].filter(Boolean).join(", ") || "Chưa cập nhật địa chỉ",
-          wheelchair: el.tags?.wheelchair || null
+          wheelchair: el.tags?.wheelchair || null,
+          isFirebase: false
         };
       }).filter(Boolean);
 
+      // 2. Fetch from Firebase
+      let parsedFirebaseLocations = [];
+      try {
+        const snapshot = await getDocs(collection(db, "locations"));
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          let typeId = "hospital";
+          if (data.category === "Cơ sở phục hồi chức năng") typeId = "rehab";
+          else if (data.category === "Trung tâm giáo dục đặc biệt") typeId = "clinic"; // Or some custom mapping
+
+          parsedFirebaseLocations.push({
+            id: doc.id,
+            name: data.name,
+            type: typeId,
+            lat: data.lat,
+            lng: data.lng,
+            distance: haversineKm(lat, lng, data.lat, data.lng),
+            address: data.address,
+            wheelchair: (data.accessibilityBadges && data.accessibilityBadges.includes("Dốc xe lăn")) ? "yes" : null,
+            accessibilityBadges: data.accessibilityBadges,
+            isFirebase: true
+          });
+        });
+      } catch (fbErr) {
+        console.error("Lỗi khi tải dữ liệu Firebase:", fbErr);
+      }
+
+      // 3. Combine and sort
+      const allLocations = [...parsedFirebaseLocations, ...parsedApiLocations];
       // Sắp xếp gần nhất lên đầu
-      parsedLocations.sort((a, b) => a.distance - b.distance);
-      setLocations(parsedLocations);
+      allLocations.sort((a, b) => a.distance - b.distance);
+      setLocations(allLocations);
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu:", error);
     } finally {
@@ -345,6 +378,17 @@ export default function SupportMapPage() {
                   <div className="min-w-[180px]">
                     <h3 className="font-bold text-gray-800 text-sm mb-1">{loc.name}</h3>
                     <p className="text-xs text-gray-600 mb-2 line-clamp-2">{loc.address}</p>
+                    
+                    {loc.accessibilityBadges && loc.accessibilityBadges.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {loc.accessibilityBadges.map((badge, idx) => (
+                          <span key={idx} className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    
                     <a 
                       href={`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`} 
                       target="_blank" 
