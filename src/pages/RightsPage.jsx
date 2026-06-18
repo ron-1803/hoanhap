@@ -57,13 +57,13 @@ const LEGAL_DOCUMENTS = [
     id: "doc-1",
     title: "Luật Người khuyết tật số 51/2010/QH12",
     date: "Ban hành ngày 17/06/2010",
-    url: "/documents/100699_l51qh.doc",
+    url: "https://thuvienphapluat.vn/van-ban/Tieu-dung/Luat-nguoi-khuyet-tat-2010-107067.aspx",
   },
   {
     id: "doc-2",
     title: "Nghị định 20/2021/NĐ-CP",
     date: "Quy định chính sách trợ giúp xã hội đối với đối tượng bảo trợ xã hội",
-    url: "/documents/nghi_dinh_20_2021_nd_cp.pdf",
+    url: "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-20-2021-ND-CP-chinh-sach-tro-giup-xa-hoi-doi-tuong-bao-tro-xa-hoi-467773.aspx",
   },
 ];
 
@@ -410,12 +410,7 @@ export default function RightsPage() {
     }
   };
 
-  // Mock PDF Download trigger
-  const handleDownloadPDF = (title) => {
-    triggerToast(`Đang tải xuống tài liệu: ${title}...`);
-  };
-
-  // Handle keypress / screen reader speech on items focus/hover
+  // Keypress / screen reader speech on items focus/hover
   const handleSpeakItem = (text) => {
     if (accessState.screenReader) {
       speakText(text);
@@ -717,13 +712,13 @@ export default function RightsPage() {
                 <Button
                   as="a"
                   href={doc.url}
-                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
                   variant="secondary"
-                  onClick={() => handleDownloadPDF(doc.title)}
-                  icon="download"
+                  icon="open_in_new"
                   className="font-bold text-xs shrink-0 self-start sm:self-center border-2"
                 >
-                  {doc.url.endsWith(".doc") ? "Tải DOC" : "Tải PDF"}
+                  Xem chi tiết
                 </Button>
               </li>
             ))}

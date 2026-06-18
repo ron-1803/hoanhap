@@ -1188,7 +1188,7 @@ export default function AdminPage() {
                     Quản lý Văn bản Pháp luật liên quan
                   </h2>
                   <p className="text-xs text-on-surface-variant dark:text-tertiary-fixed-dim">
-                    Thêm các nghị định, luật đính kèm liên quan để người dùng tải về tham khảo.
+                    Thêm các nghị định, luật hoặc dự thảo liên quan qua đường dẫn trực tiếp để người dùng tham khảo.
                   </p>
                 </div>
                 <button
@@ -1234,7 +1234,7 @@ export default function AdminPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="doc-url" className="block text-xs font-bold mb-1.5">Đường dẫn tệp tài liệu (*)</label>
+                    <label htmlFor="doc-url" className="block text-xs font-bold mb-1.5">Liên kết trực tiếp đến dự thảo/văn bản (*)</label>
                     <input
                       id="doc-url"
                       type="text"
@@ -1242,7 +1242,7 @@ export default function AdminPage() {
                       value={docForm.url}
                       onChange={(e) => setDocForm({ ...docForm, url: e.target.value })}
                       className="w-full bg-surface-container-high dark:bg-tertiary-container border border-outline rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent theme-transition"
-                      placeholder="Ví dụ: /documents/nghi_dinh_20_2021_nd_cp.pdf..."
+                      placeholder="Ví dụ: https://thuvienphapluat.vn/van-ban/..."
                     />
                   </div>
 
@@ -1275,7 +1275,7 @@ export default function AdminPage() {
                       <tr className="border-b border-outline-variant/60" role="row">
                         <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Tên văn bản luật</th>
                         <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Ngày ban hành / Ghi chú</th>
-                        <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Liên kết tệp</th>
+                        <th className="pb-3 font-bold text-on-surface-variant/70 uppercase" role="columnheader">Liên kết gốc</th>
                         <th className="pb-3 font-bold text-on-surface-variant/70 uppercase text-right" role="columnheader">Hành động</th>
                       </tr>
                     </thead>
