@@ -260,16 +260,16 @@ html.high-contrast svg path {
    ═══════════════════════════════════════════════════ */
 html.highlight-links a[href]:not(.skip-link) {
   text-decoration-line: underline !important;
-  text-decoration-thickness: 0.14em !important;
+  text-decoration-thickness: 0.16em !important;
   text-underline-offset: 0.18em !important;
   text-decoration-color: currentColor !important;
-  box-shadow: inset 0 -0.42em 0 rgba(255, 215, 0, 0.38);
+  box-shadow: inset 0 -0.42em 0 rgba(255, 215, 0, 0.46);
   border-radius: 0.2rem;
 }
 
 html.highlight-links a[href]:not(.skip-link):hover,
 html.highlight-links a[href]:not(.skip-link):focus-visible {
-  box-shadow: inset 0 -0.85em 0 rgba(255, 215, 0, 0.55);
+  box-shadow: inset 0 -0.85em 0 rgba(255, 215, 0, 0.65);
 }
 
 html.dark.highlight-links a[href]:not(.skip-link) {
@@ -285,7 +285,7 @@ html.high-contrast.highlight-links a[href]:not(.skip-link) {
   color: #ffff00 !important;
   text-decoration-color: #ffff00 !important;
   box-shadow: none !important;
-  border-bottom: 3px solid #ffff00 !important;
+  border-bottom: 4px solid #ffff00 !important;
 }
 
 /* ═══════════════════════════════════════════════════
