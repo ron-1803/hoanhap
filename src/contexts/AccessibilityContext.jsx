@@ -15,6 +15,7 @@ let voicesLoggedThisSession = false;
    • screenReader – TTS via Web Speech API with Vietnamese voice
    • keyboardNav  – Enhanced focus indicators for keyboard-only users
    • readingMark  – Horizontal reading guide that follows pointer/touch
+   • highlightLinks – Extra-visible link styling for low-vision users
    
    TTS Strategy:
    Uses the browser's built-in Web Speech API (SpeechSynthesis).
@@ -42,6 +43,7 @@ const defaultState = {
   screenReader: true,
   keyboardNav: false,
   readingMark: false,
+  highlightLinks: false,
 };
 
 // ─── Load persisted state from localStorage ─────────────────────
@@ -84,6 +86,7 @@ const ActionTypes = {
   TOGGLE_SCREEN_READER: "TOGGLE_SCREEN_READER",
   TOGGLE_KEYBOARD_NAV: "TOGGLE_KEYBOARD_NAV",
   TOGGLE_READING_MARK: "TOGGLE_READING_MARK",
+  TOGGLE_HIGHLIGHT_LINKS: "TOGGLE_HIGHLIGHT_LINKS",
   RESET: "RESET",
 };
 
@@ -107,6 +110,8 @@ function accessibilityReducer(state, action) {
       return { ...state, keyboardNav: !state.keyboardNav };
     case ActionTypes.TOGGLE_READING_MARK:
       return { ...state, readingMark: !state.readingMark };
+    case ActionTypes.TOGGLE_HIGHLIGHT_LINKS:
+      return { ...state, highlightLinks: !state.highlightLinks };
     case ActionTypes.RESET:
       return { ...defaultState };
     default:
@@ -250,6 +255,15 @@ export function AccessibilityProvider({ children }) {
       cl.remove("reading-mark-enabled");
     }
   }, [state.readingMark]);
+  // ── Apply highlighted links class to <html> ──
+  useEffect(() => {
+    const cl = document.documentElement.classList;
+    if (state.highlightLinks) {
+      cl.add("highlight-links");
+    } else {
+      cl.remove("highlight-links");
+    }
+  }, [state.highlightLinks]);
 
   // ── Stop speaking ──
   const stopSpeaking = useCallback(() => {
@@ -404,6 +418,10 @@ export function AccessibilityProvider({ children }) {
     () => dispatch({ type: ActionTypes.TOGGLE_READING_MARK }),
     []
   );
+  const toggleHighlightLinks = useCallback(
+    () => dispatch({ type: ActionTypes.TOGGLE_HIGHLIGHT_LINKS }),
+    []
+  );
   const resetAccessibility = useCallback(
     () => dispatch({ type: ActionTypes.RESET }),
     []
@@ -418,6 +436,8 @@ export function AccessibilityProvider({ children }) {
     toggleScreenReader,
     toggleKeyboardNav,
     toggleReadingMark,
+    toggleReadingMark,
+    toggleHighlightLinks,
     resetAccessibility,
     speakText,
     stopSpeaking,

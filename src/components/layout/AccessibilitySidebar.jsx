@@ -7,14 +7,15 @@ import SOSModal from "./SOSModal";
 /**
  * AccessibilitySidebar — Fixed left toolbar (80px wide)
  *
- * Contains 7 accessibility tool buttons as specified in DESIGN.md:
+ * Contains accessibility tool buttons as specified in DESIGN.md:
  * 1. Đọc nội dung (TTS toggle)
  * 2. Tăng chữ (increase font scale)
  * 3. Giảm chữ (decrease font scale)
  * 4. Tương phản (high contrast toggle)
  * 5. Giao diện tối (dark mode toggle)
  * 6. Thước đọc (reading mark toggle)
- * 7. SOS (emergency — pinned to bottom)
+ * 7. Làm nổi bật liên kết (highlight links toggle)
+ * 8. SOS (emergency — pinned to bottom)
  *
  * Each button is 64×64px with aria-label and aria-pressed (for toggles).
  * Tab order flows top-to-bottom within the sidebar.
@@ -29,6 +30,7 @@ export default function AccessibilitySidebar() {
     toggleHighContrast,
     toggleScreenReader,
     toggleReadingMark,
+    toggleHighlightLinks,
   } = useAccessibility();
   const { t, language } = useLanguage();
 
@@ -165,12 +167,31 @@ export default function AccessibilitySidebar() {
           </span>
         </button>
 
+        {/* Tool 7: Highlight Links */}
+        <button
+          onClick={toggleHighlightLinks}
+          aria-label={t("sidebar_highlight_links_desc")}
+          aria-pressed={state.highlightLinks}
+          className={`sidebar-tool-btn group transition-all duration-200 rounded-xl ${
+            state.highlightLinks ? activeClasses : inactiveClasses
+          }`}
+        >
+          <Icon
+            name="link"
+            size="text-2xl"
+            className="group-hover:scale-110 transition-transform"
+          />
+          <span className="icon-label">
+            {t("sidebar_highlight_links")}
+          </span>
+        </button>
+
 
 
         {/* Spacer — pushes SOS to bottom */}
         <div className="flex-grow" aria-hidden="true" />
 
-        {/* Tool 7: SOS Emergency (pinned to bottom) */}
+        {/* Tool 8: SOS Emergency (pinned to bottom) */}
         <button
           onClick={handleSOS}
           aria-label={t("sidebar_sos_desc")}
