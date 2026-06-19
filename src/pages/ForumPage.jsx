@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, onSnapshot, addDoc, updateDoc, doc, arrayUnion } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -958,3 +958,4 @@ export default function ForumPage({ isTab = false }) {
     </div>
   );
 }
+

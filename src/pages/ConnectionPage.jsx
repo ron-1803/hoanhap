@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import Icon from "../components/ui/Icon";
 import Button from "../components/ui/Button";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, onSnapshot, query, where, addDoc } from "firebase/firestore";
 
 const VIETNAM_PROVINCES = [
@@ -1005,3 +1005,4 @@ export default function ConnectionPage({ isTab = false }) {
     </div>
   );
 }
+

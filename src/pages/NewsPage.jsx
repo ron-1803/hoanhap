@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Icon from "../components/ui/Icon";
 import { useAccessibility } from "../contexts/AccessibilityContext";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 
 export default function NewsPage() {
@@ -388,3 +388,4 @@ export default function NewsPage() {
     </div>
   );
 }
+

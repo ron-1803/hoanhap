@@ -317,16 +317,6 @@ export default function Header() {
                     {t("profile")}
                   </Link>
 
-                  <Link
-                    to="/ho-so#saved"
-                    onClick={() => setProfileOpen(false)}
-                    role="menuitem"
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
-                               hover:bg-surface-variant dark:hover:bg-tertiary/20 transition-colors"
-                  >
-                    <Icon name="bookmark" size="text-lg" />
-                    {t("saved_rights")}
-                  </Link>
 
                   {user.role === "admin" && (
                     <Link

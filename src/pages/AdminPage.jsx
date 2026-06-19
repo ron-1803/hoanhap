@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import Icon from "../components/ui/Icon";
 import { useAccessibility } from "../contexts/AccessibilityContext";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import {
   collection,
   doc,
@@ -2215,3 +2215,4 @@ export default function AdminPage() {
     </div>
   );
 }
+

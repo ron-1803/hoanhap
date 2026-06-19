@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAccessibility } from "../contexts/AccessibilityContext";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 // ── Định nghĩa danh mục & Thẻ API OSM ──

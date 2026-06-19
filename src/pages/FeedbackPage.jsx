@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useAccessibility } from "../contexts/AccessibilityContext";
 import Icon from "../components/ui/Icon";
 import Button from "../components/ui/Button";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 export default function FeedbackPage() {
@@ -268,3 +268,4 @@ export default function FeedbackPage() {
     </div>
   );
 }
+

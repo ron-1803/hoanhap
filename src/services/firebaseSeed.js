@@ -1,4 +1,4 @@
-import { db, auth, isFirebaseConfigured } from "../firebase";
+import { db, auth, isFirebaseConfigured } from "./firebase";
 import { 
   collection, 
   getDocs, 
@@ -17,7 +17,7 @@ import {
   DEFAULT_OFFICES,
   DEFAULT_ARTICLES,
   DEFAULT_FORUM_POSTS
-} from "./defaultData";
+} from "../utils/defaultData";
 
 // Tự động tạo tài khoản Admin mặc định
 async function seedAdminUser() {
@@ -128,3 +128,4 @@ export async function seedDatabase() {
     console.error("Firebase Database Seeding failed:", error);
   }
 }
+

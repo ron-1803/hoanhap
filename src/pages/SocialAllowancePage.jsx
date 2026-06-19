@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAccessibility } from "../contexts/AccessibilityContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import Icon from "../components/ui/Icon";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { doc, collection, onSnapshot } from "firebase/firestore";
 
 export default function SocialAllowancePage() {
@@ -507,3 +507,4 @@ export default function SocialAllowancePage() {
     </div>
   );
 }
+

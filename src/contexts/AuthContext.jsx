@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAccessibility } from "./AccessibilityContext";
-import { auth, db, firebaseConfigError, isFirebaseConfigured } from "../firebase";
+import { auth, db, firebaseConfigError, isFirebaseConfigured } from "../services/firebase";
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
@@ -9,7 +9,7 @@ import {
   sendPasswordResetEmail
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { seedDatabase } from "../utils/firebaseSeed";
+import { seedDatabase } from "../services/firebaseSeed";
 
 /* ═══════════════════════════════════════════════════════════════════
    AuthContext (Firebase Integrated)
@@ -286,4 +286,6 @@ export function useAuth() {
 }
 
 export default AuthContext;
+
+
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAccessibility } from "../contexts/AccessibilityContext";
 import { useAuth } from "../contexts/AuthContext";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import Icon from "../components/ui/Icon";
 import Button from "../components/ui/Button";
@@ -822,3 +822,4 @@ export default function RightsPage() {
     </div>
   );
 }
+
