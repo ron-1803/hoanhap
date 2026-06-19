@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../ui/Icon";
 import { useAuth } from "../../contexts/AuthContext";
@@ -229,8 +229,9 @@ export default function Header() {
 
             if (index === 2) {
               return (
-                <div key="community-dropdown" className="relative flex items-center group" ref={connectionRef} onKeyDown={handleConnectionKeyDown}>
-                  <div className="relative">
+                <Fragment key="community-dropdown-wrapper">
+                  <div key="community-dropdown" className="relative flex items-center group" ref={connectionRef} onKeyDown={handleConnectionKeyDown}>
+                    <div className="relative">
                     <button
                       onClick={() => {
                         setConnectionOpen((prev) => !prev);
@@ -320,9 +321,10 @@ export default function Header() {
                       </div>
                     </div>
                   </div>
-                  {navLink}
                 </div>
-              );
+                {navLink}
+              </Fragment>
+            );
             }
             return navLink;
           })}
