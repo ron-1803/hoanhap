@@ -37,7 +37,7 @@ export default function ServiceCard({
       to={to}
       aria-label={ariaLabel || `${title}: ${description}`}
       className="service-card glass-card group
-                 rounded-2xl p-8 flex flex-col items-start gap-6
+                 rounded-2xl p-8 h-full flex flex-col items-start gap-6
                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container-lowest
                  theme-transition hover:-translate-y-1"
     >
