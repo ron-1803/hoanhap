@@ -229,7 +229,7 @@ export default function Header() {
 
             if (index === 2) {
               return (
-                <div key="community-dropdown" className="relative flex items-center" ref={connectionRef} onKeyDown={handleConnectionKeyDown}>
+                <div key="community-dropdown" className="relative flex items-center group" ref={connectionRef} onKeyDown={handleConnectionKeyDown}>
                   <div className="relative">
                     <button
                       onClick={() => {
@@ -245,18 +245,17 @@ export default function Header() {
                         transition-all duration-200 active:scale-95
                         focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
                         flex items-center gap-1.5
-                        ${
-                          connectionOpen
-                            ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed shadow-sm"
-                            : "text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container"
-                        }`}
+                        text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container
+                        group-hover:text-primary group-hover:bg-primary-fixed dark:group-hover:bg-on-primary-fixed-variant dark:group-hover:text-primary-fixed group-hover:shadow-sm
+                        group-focus-within:text-primary group-focus-within:bg-primary-fixed dark:group-focus-within:bg-on-primary-fixed-variant dark:group-focus-within:text-primary-fixed group-focus-within:shadow-sm
+                        ${connectionOpen ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed shadow-sm" : ""}
+                      `}
                     >
-                      <Icon name="diversity_3" size="text-lg" className={`transition-colors duration-200 ${connectionOpen ? "text-primary dark:text-primary-fixed" : ""}`} />
                       {t("connection")}
                       <Icon
                         name="expand_more"
                         size="text-lg"
-                        className={`transition-transform duration-300 ease-out ${connectionOpen ? "rotate-180" : ""}`}
+                        className={`transition-transform duration-300 ease-out group-hover:rotate-180 group-focus-within:rotate-180 ${connectionOpen ? "rotate-180" : ""}`}
                       />
                     </button>
 
@@ -268,10 +267,11 @@ export default function Header() {
                       className={`absolute left-0 top-full mt-1.5 w-60 rounded-xl shadow-xl py-1.5 z-50
                         bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
                         transition-all duration-200 ease-out origin-top
-                        ${connectionOpen
-                          ? "opacity-100 visible scale-100 translate-y-0"
-                          : "opacity-0 invisible scale-95 -translate-y-1 pointer-events-none"
-                        }`}
+                        opacity-0 invisible scale-95 -translate-y-1 pointer-events-none
+                        group-hover:opacity-100 group-hover:visible group-hover:scale-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                        group-focus-within:opacity-100 group-focus-within:visible group-focus-within:scale-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
+                        ${connectionOpen ? "!opacity-100 !visible !scale-100 !translate-y-0 !pointer-events-auto" : ""}
+                        `}
                     >
                       <Link
                         to="/ket-noi?tab=ket-noi"
