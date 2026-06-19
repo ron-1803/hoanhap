@@ -12,7 +12,6 @@ import { useAccessibility } from "../../contexts/AccessibilityContext";
 const NAV_ITEMS = [
   { to: "/quyen-loi", labelKey: "rights" },
   { to: "/tro-cap", labelKey: "allowance" },
-  { to: "/ket-noi", labelKey: "connection" },
   { to: "/ban-do", labelKey: "map" },
 ];
 
@@ -115,24 +114,66 @@ export default function Header() {
 
         {/* ── Desktop Navigation ── */}
         <nav aria-label={t("notifications")} className="hidden md:flex gap-2 lg:gap-6 items-center">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `font-semibold text-label-lg px-3 py-2 rounded-lg
-                 transition-all duration-150 active:scale-95
-                 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
-                 ${
-                   isActive
-                     ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed"
-                     : "text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container"
-                 }`
-              }
-            >
-              {t(item.labelKey)}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map((item, index) => {
+            // Render regular items, and insert the Community Dropdown at index 2 (between allowance and map)
+            const navLink = (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `font-semibold text-label-lg px-3 py-2 rounded-lg
+                   transition-all duration-150 active:scale-95
+                   focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
+                   ${
+                     isActive
+                       ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed"
+                       : "text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container"
+                   }`
+                }
+              >
+                {t(item.labelKey)}
+              </NavLink>
+            );
+
+            if (index === 2) {
+              return (
+                <div key="community-dropdown" className="relative flex items-center">
+                  <div className="relative group">
+                    <button
+                      className={`font-semibold text-label-lg px-3 py-2 rounded-lg transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-1 text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container group-hover:text-primary group-hover:bg-primary-fixed dark:group-hover:bg-on-primary-fixed-variant dark:group-hover:text-primary-fixed group-focus-within:text-primary group-focus-within:bg-primary-fixed dark:group-focus-within:bg-on-primary-fixed-variant dark:group-focus-within:text-primary-fixed`}
+                    >
+                      {t("connection")}
+                      <Icon name="expand_more" size="text-lg" className="transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" />
+                    </button>
+
+                    <div
+                      className="absolute left-0 top-full mt-1 w-56 glass-card rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200"
+                      role="menu"
+                    >
+                      <Link
+                        to="/ket-noi?tab=ket-noi"
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim hover:bg-surface-variant dark:hover:bg-tertiary/20 transition-colors focus-visible:bg-surface-variant focus-visible:outline-none"
+                      >
+                        <Icon name="handshake" size="text-lg" />
+                        {t("connection_directory")}
+                      </Link>
+                      <Link
+                        to="/ket-noi?tab=dien-dan"
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim hover:bg-surface-variant dark:hover:bg-tertiary/20 transition-colors focus-visible:bg-surface-variant focus-visible:outline-none"
+                      >
+                        <Icon name="forum" size="text-lg" />
+                        {t("forum")}
+                      </Link>
+                    </div>
+                  </div>
+                  {navLink}
+                </div>
+              );
+            }
+            return navLink;
+          })}
         </nav>
 
         {/* ── Action Buttons ── */}
@@ -389,26 +430,77 @@ export default function Header() {
                      px-4 py-4 space-y-2
                      animate-[slideUp_0.2s_ease-out]"
         >
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `block font-semibold text-label-lg px-4 py-3 rounded-lg
-                 transition-colors min-h-[48px]
-                 focus-visible:ring-4 focus-visible:ring-primary
-                 ${
-                   isActive
-                     ? "text-primary bg-primary-fixed"
-                     : "text-on-surface-variant hover:text-primary hover:bg-surface-variant"
-                 }`
-              }
-            >
-              {t(item.labelKey)}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map((item, index) => {
+            const navLink = (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block font-semibold text-label-lg px-4 py-3 rounded-lg
+                   transition-colors min-h-[48px]
+                   focus-visible:ring-4 focus-visible:ring-primary
+                   ${
+                     isActive
+                       ? "text-primary bg-primary-fixed"
+                       : "text-on-surface-variant hover:text-primary hover:bg-surface-variant"
+                   }`
+                }
+              >
+                {t(item.labelKey)}
+              </NavLink>
+            );
 
+            if (index === 2) {
+              return (
+                <div key="community-mobile" className="space-y-1">
+                  <div className="px-4 py-2 font-bold text-sm text-on-surface-variant dark:text-tertiary-fixed-dim uppercase tracking-wider">
+                    {t("connection")}
+                  </div>
+                  <NavLink
+                    to="/ket-noi?tab=ket-noi"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block font-semibold text-label-lg px-8 py-3 rounded-lg
+                       transition-colors min-h-[48px]
+                       focus-visible:ring-4 focus-visible:ring-primary
+                       ${
+                         isActive || window.location.search.includes("tab=ket-noi")
+                           ? "text-primary bg-primary-fixed"
+                           : "text-on-surface-variant hover:text-primary hover:bg-surface-variant"
+                       }`
+                    }
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon name="handshake" size="text-lg" />
+                      {t("connection_directory")}
+                    </div>
+                  </NavLink>
+                  <NavLink
+                    to="/ket-noi?tab=dien-dan"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block font-semibold text-label-lg px-8 py-3 rounded-lg
+                       transition-colors min-h-[48px]
+                       focus-visible:ring-4 focus-visible:ring-primary
+                       ${
+                         window.location.search.includes("tab=dien-dan")
+                           ? "text-primary bg-primary-fixed"
+                           : "text-on-surface-variant hover:text-primary hover:bg-surface-variant"
+                       }`
+                    }
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon name="forum" size="text-lg" />
+                      {t("forum")}
+                    </div>
+                  </NavLink>
+                  {navLink}
+                </div>
+              );
+            }
+            return navLink;
+          })}
           {/* Mobile-only: Language & Notifications */}
           <div className="flex gap-2 pt-2 border-t border-outline-variant">
             <button

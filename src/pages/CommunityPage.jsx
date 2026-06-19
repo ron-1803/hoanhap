@@ -40,31 +40,6 @@ export default function CommunityPage() {
                 : "Nơi kết nối bạn với những tấm lòng hảo tâm, tìm kiếm người đồng hành và chia sẻ những khó khăn trong cuộc sống thường nhật."}
             </p>
 
-            {/* Tab Switcher in Hero */}
-            <div className="inline-flex items-center p-1.5 bg-surface/50 dark:bg-tertiary/50 backdrop-blur-md rounded-full shadow-inner border border-outline-variant/30">
-              <button
-                onClick={() => handleTabChange("ket-noi")}
-                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-200 flex items-center gap-2 ${
-                  currentTab === "ket-noi"
-                    ? "bg-primary/20 text-primary-dark dark:bg-primary text-primary dark:text-on-primary shadow-sm"
-                    : "text-on-surface-variant hover:text-primary dark:text-inverse-on-surface"
-                }`}
-              >
-                <Icon name="handshake" size="text-sm" />
-                {language === "en" ? "Connections Directory" : "Kết nối"}
-              </button>
-              <button
-                onClick={() => handleTabChange("dien-dan")}
-                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-200 flex items-center gap-2 ${
-                  currentTab === "dien-dan"
-                    ? "bg-primary/20 text-primary-dark dark:bg-primary text-primary dark:text-on-primary shadow-sm"
-                    : "text-on-surface-variant hover:text-primary dark:text-inverse-on-surface"
-                }`}
-              >
-                <Icon name="forum" size="text-sm" />
-                {language === "en" ? "Community Forum" : "Diễn đàn kết nối"}
-              </button>
-            </div>
           </div>
         </div>
       </section>
