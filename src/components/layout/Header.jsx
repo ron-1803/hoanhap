@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../ui/Icon";
 import { useAuth } from "../../contexts/AuthContext";
@@ -24,6 +24,12 @@ export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [connectionOpen, setConnectionOpen] = useState(false);
+
+  // Refs for click-outside and keyboard navigation
+  const connectionRef = useRef(null);
+  const connectionMenuRef = useRef(null);
+  const connectionMenuItemsRef = useRef([]);
 
   // Mock notifications list
   const [notifications, setNotifications] = useState([
@@ -52,18 +58,78 @@ export default function Header() {
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
+  // Close all dropdowns helper
+  const closeAllDropdowns = useCallback(() => {
+    setProfileOpen(false);
+    setLangOpen(false);
+    setNotifOpen(false);
+    setConnectionOpen(false);
+  }, []);
+
   // Global escape key listener to close dropdowns
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === "Escape") {
-        setProfileOpen(false);
-        setLangOpen(false);
-        setNotifOpen(false);
+        closeAllDropdowns();
       }
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [closeAllDropdowns]);
+
+  // Click-outside handler for connection dropdown
+  useEffect(() => {
+    if (!connectionOpen) return;
+    function handleClickOutside(e) {
+      if (connectionRef.current && !connectionRef.current.contains(e.target)) {
+        setConnectionOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [connectionOpen]);
+
+  // Keyboard navigation for connection dropdown menu
+  const handleConnectionKeyDown = useCallback((e) => {
+    const items = connectionMenuItemsRef.current.filter(Boolean);
+    if (!items.length) return;
+
+    const currentIndex = items.indexOf(document.activeElement);
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        if (!connectionOpen) {
+          setConnectionOpen(true);
+          // Focus first item after menu renders
+          requestAnimationFrame(() => {
+            const updatedItems = connectionMenuItemsRef.current.filter(Boolean);
+            updatedItems[0]?.focus();
+          });
+        } else {
+          const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+          items[nextIndex]?.focus();
+        }
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (connectionOpen) {
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+          items[prevIndex]?.focus();
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setConnectionOpen(false);
+        connectionRef.current?.querySelector("button")?.focus();
+        break;
+      case "Tab":
+        setConnectionOpen(false);
+        break;
+      default:
+        break;
+    }
+  }, [connectionOpen]);
 
   const markAllAsRead = () => {
     const updated = notifications.map(n => ({ ...n, read: true }));
@@ -137,34 +203,92 @@ export default function Header() {
 
             if (index === 2) {
               return (
-                <div key="community-dropdown" className="relative flex items-center">
-                  <div className="relative group">
+                <div key="community-dropdown" className="relative flex items-center" ref={connectionRef} onKeyDown={handleConnectionKeyDown}>
+                  <div className="relative">
                     <button
-                      className={`font-semibold text-label-lg px-3 py-2 rounded-lg transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-1 text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container group-hover:text-primary group-hover:bg-primary-fixed dark:group-hover:bg-on-primary-fixed-variant dark:group-hover:text-primary-fixed group-focus-within:text-primary group-focus-within:bg-primary-fixed dark:group-focus-within:bg-on-primary-fixed-variant dark:group-focus-within:text-primary-fixed`}
+                      onClick={() => {
+                        setConnectionOpen((prev) => !prev);
+                        setLangOpen(false);
+                        setNotifOpen(false);
+                        setProfileOpen(false);
+                      }}
+                      aria-expanded={connectionOpen}
+                      aria-haspopup="true"
+                      aria-controls="connection-dropdown-menu"
+                      className={`font-semibold text-label-lg px-3 py-2 rounded-lg
+                        transition-all duration-200 active:scale-95
+                        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
+                        flex items-center gap-1.5
+                        ${
+                          connectionOpen
+                            ? "text-primary bg-primary-fixed dark:bg-on-primary-fixed-variant dark:text-primary-fixed shadow-sm"
+                            : "text-on-surface-variant dark:text-tertiary-fixed-dim hover:text-primary hover:bg-surface-variant dark:hover:bg-tertiary-container"
+                        }`}
                     >
+                      <Icon name="diversity_3" size="text-lg" className={`transition-colors duration-200 ${connectionOpen ? "text-primary dark:text-primary-fixed" : ""}`} />
                       {t("connection")}
-                      <Icon name="expand_more" size="text-lg" className="transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" />
+                      <Icon
+                        name="expand_more"
+                        size="text-lg"
+                        className={`transition-transform duration-300 ease-out ${connectionOpen ? "rotate-180" : ""}`}
+                      />
                     </button>
 
+                    {/* Dropdown menu with smooth animation */}
                     <div
-                      className="absolute left-0 top-full mt-1 w-56 glass-card rounded-xl shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200"
+                      id="connection-dropdown-menu"
                       role="menu"
+                      aria-label={language === "en" ? "Connection sub-menu" : "Menu con Kết nối"}
+                      className={`absolute left-0 top-full mt-1.5 w-60 glass-card rounded-xl shadow-xl py-1.5 z-50
+                        transition-all duration-200 ease-out origin-top
+                        ${connectionOpen
+                          ? "opacity-100 visible scale-100 translate-y-0"
+                          : "opacity-0 invisible scale-95 -translate-y-1 pointer-events-none"
+                        }`}
                     >
                       <Link
                         to="/ket-noi?tab=ket-noi"
+                        ref={(el) => (connectionMenuItemsRef.current[0] = el)}
                         role="menuitem"
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim hover:bg-surface-variant dark:hover:bg-tertiary/20 transition-colors focus-visible:bg-surface-variant focus-visible:outline-none"
+                        tabIndex={connectionOpen ? 0 : -1}
+                        onClick={() => setConnectionOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
+                          hover:bg-primary/8 dark:hover:bg-primary-fixed/10
+                          hover:text-primary dark:hover:text-primary-fixed
+                          transition-colors rounded-lg mx-1.5
+                          focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
                       >
-                        <Icon name="handshake" size="text-lg" />
-                        {t("connection_directory")}
+                        <span className="w-8 h-8 rounded-lg bg-primary/10 dark:bg-primary-fixed/10 flex items-center justify-center shrink-0">
+                          <Icon name="handshake" size="text-lg" className="text-primary dark:text-primary-fixed" />
+                        </span>
+                        <div>
+                          <span className="font-semibold block">{t("connection_directory")}</span>
+                          <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
+                            {language === "en" ? "Find support partners" : "Tìm đối tác hỗ trợ"}
+                          </span>
+                        </div>
                       </Link>
                       <Link
                         to="/ket-noi?tab=dien-dan"
+                        ref={(el) => (connectionMenuItemsRef.current[1] = el)}
                         role="menuitem"
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim hover:bg-surface-variant dark:hover:bg-tertiary/20 transition-colors focus-visible:bg-surface-variant focus-visible:outline-none"
+                        tabIndex={connectionOpen ? 0 : -1}
+                        onClick={() => setConnectionOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
+                          hover:bg-primary/8 dark:hover:bg-primary-fixed/10
+                          hover:text-primary dark:hover:text-primary-fixed
+                          transition-colors rounded-lg mx-1.5
+                          focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
                       >
-                        <Icon name="forum" size="text-lg" />
-                        {t("forum")}
+                        <span className="w-8 h-8 rounded-lg bg-secondary/10 dark:bg-secondary-fixed/10 flex items-center justify-center shrink-0">
+                          <Icon name="forum" size="text-lg" className="text-secondary dark:text-secondary-fixed" />
+                        </span>
+                        <div>
+                          <span className="font-semibold block">{t("forum")}</span>
+                          <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
+                            {language === "en" ? "Share & discuss" : "Chia sẻ & thảo luận"}
+                          </span>
+                        </div>
                       </Link>
                     </div>
                   </div>
@@ -185,6 +309,7 @@ export default function Header() {
                 setLangOpen(!langOpen);
                 setNotifOpen(false);
                 setProfileOpen(false);
+                setConnectionOpen(false);
               }}
               aria-label={t("language")}
               aria-expanded={langOpen}
@@ -244,6 +369,7 @@ export default function Header() {
                 setNotifOpen(!notifOpen);
                 setLangOpen(false);
                 setProfileOpen(false);
+                setConnectionOpen(false);
               }}
               aria-label={t("notifications")}
               aria-expanded={notifOpen}
@@ -323,6 +449,7 @@ export default function Header() {
                   setProfileOpen(!profileOpen);
                   setLangOpen(false);
                   setNotifOpen(false);
+                  setConnectionOpen(false);
                 }}
                 aria-label={`Tài khoản của ${user.fullName}`}
                 aria-expanded={profileOpen}
