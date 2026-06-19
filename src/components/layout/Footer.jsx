@@ -18,9 +18,10 @@ export default function Footer() {
 
   return (
     <footer
-      className="footer-gradient bg-dots-pattern relative overflow-hidden
+      className="footer-gradient bg-[#111318] bg-dots-pattern relative overflow-hidden
                  text-gray-400 w-full mt-auto
                  border-t border-white/5 theme-transition"
+      style={{ backgroundColor: "#111318" }}
     >
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-primary/10 blur-[100px] pointer-events-none" />
       <div
@@ -37,7 +38,7 @@ export default function Footer() {
               </div>
               <span className="font-extrabold text-xl text-white">Hoà Nhập</span>
             </div>
-            <p className="text-sm leading-relaxed text-gray-500">
+            <p className="text-sm leading-relaxed text-gray-300">
               {t("footer_desc")}
             </p>
           </div>
@@ -51,13 +52,13 @@ export default function Footer() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="flex items-center gap-2 text-sm text-gray-400
+                className="flex items-center gap-2 text-sm text-gray-300
                            hover:text-white transition-colors duration-200
-                           focus-visible:ring-2 focus-visible:ring-primary
+                           focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary-fixed-dim
                            rounded-md p-1 group"
               >
                 <Icon name={link.icon} size="text-base"
-                      className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                      className="opacity-80 group-hover:opacity-100 transition-opacity" />
                 {t(link.labelKey)}
               </Link>
             ))}
@@ -66,10 +67,10 @@ export default function Footer() {
 
         {/* ── Divider ── */}
         <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-300">
             © {new Date().getFullYear()} Hoà Nhập — {t("all_rights_reserved")}.
           </p>
-          <p className="text-xs text-gray-600 flex items-center gap-1">
+          <p className="text-xs text-gray-300 flex items-center gap-1">
             {t("footer_built_with")}
             <Icon name="favorite" filled size="text-xs" className="text-rose-500" />
             {t("footer_built_for")}
