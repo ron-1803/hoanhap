@@ -264,8 +264,7 @@ export default function Header() {
                       id="connection-dropdown-menu"
                       role="menu"
                       aria-label={language === "en" ? "Connection sub-menu" : "Menu con Kết nối"}
-                      className={`absolute left-0 top-full mt-1.5 w-60 rounded-xl shadow-xl py-1.5 z-50
-                        bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
+                      className={`absolute left-0 top-full pt-2 w-60 z-50
                         transition-all duration-200 ease-out origin-top
                         opacity-0 invisible scale-95 -translate-y-1 pointer-events-none
                         group-hover:opacity-100 group-hover:visible group-hover:scale-100 group-hover:translate-y-0 group-hover:pointer-events-auto
@@ -273,50 +272,52 @@ export default function Header() {
                         ${connectionOpen ? "!opacity-100 !visible !scale-100 !translate-y-0 !pointer-events-auto" : ""}
                         `}
                     >
-                      <Link
-                        to="/ket-noi?tab=ket-noi"
-                        ref={(el) => (connectionMenuItemsRef.current[0] = el)}
-                        role="menuitem"
-                        tabIndex={connectionOpen ? 0 : -1}
-                        onClick={() => setConnectionOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
-                          hover:bg-primary/8 dark:hover:bg-primary-fixed/10
-                          hover:text-primary dark:hover:text-primary-fixed
-                          transition-colors rounded-lg mx-1.5
-                          focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
-                      >
-                        <span className="w-8 h-8 rounded-lg bg-primary/10 dark:bg-primary-fixed/10 flex items-center justify-center shrink-0">
-                          <Icon name="handshake" size="text-lg" className="text-primary dark:text-primary-fixed" />
-                        </span>
-                        <div>
-                          <span className="font-semibold block">{t("connection_directory")}</span>
-                          <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
-                            {language === "en" ? "Find support partners" : "Tìm đối tác hỗ trợ"}
+                      <div className="bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10 rounded-xl shadow-xl py-1.5">
+                        <Link
+                          to="/ket-noi?tab=ket-noi"
+                          ref={(el) => (connectionMenuItemsRef.current[0] = el)}
+                          role="menuitem"
+                          tabIndex={connectionOpen ? 0 : -1}
+                          onClick={() => setConnectionOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
+                            hover:bg-primary/8 dark:hover:bg-primary-fixed/10
+                            hover:text-primary dark:hover:text-primary-fixed
+                            transition-colors rounded-lg mx-1.5
+                            focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
+                        >
+                          <span className="w-8 h-8 rounded-lg bg-primary/10 dark:bg-primary-fixed/10 flex items-center justify-center shrink-0">
+                            <Icon name="handshake" size="text-lg" className="text-primary dark:text-primary-fixed" />
                           </span>
-                        </div>
-                      </Link>
-                      <Link
-                        to="/ket-noi?tab=dien-dan"
-                        ref={(el) => (connectionMenuItemsRef.current[1] = el)}
-                        role="menuitem"
-                        tabIndex={connectionOpen ? 0 : -1}
-                        onClick={() => setConnectionOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
-                          hover:bg-primary/8 dark:hover:bg-primary-fixed/10
-                          hover:text-primary dark:hover:text-primary-fixed
-                          transition-colors rounded-lg mx-1.5
-                          focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
-                      >
-                        <span className="w-8 h-8 rounded-lg bg-secondary/10 dark:bg-secondary-fixed/10 flex items-center justify-center shrink-0">
-                          <Icon name="forum" size="text-lg" className="text-secondary dark:text-secondary-fixed" />
-                        </span>
-                        <div>
-                          <span className="font-semibold block">{t("forum")}</span>
-                          <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
-                            {language === "en" ? "Share & discuss" : "Chia sẻ & thảo luận"}
+                          <div>
+                            <span className="font-semibold block">{t("connection_directory")}</span>
+                            <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
+                              {language === "en" ? "Find support partners" : "Tìm đối tác hỗ trợ"}
+                            </span>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/ket-noi?tab=dien-dan"
+                          ref={(el) => (connectionMenuItemsRef.current[1] = el)}
+                          role="menuitem"
+                          tabIndex={connectionOpen ? 0 : -1}
+                          onClick={() => setConnectionOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant dark:text-tertiary-fixed-dim
+                            hover:bg-primary/8 dark:hover:bg-primary-fixed/10
+                            hover:text-primary dark:hover:text-primary-fixed
+                            transition-colors rounded-lg mx-1.5
+                            focus-visible:bg-primary/8 focus-visible:text-primary focus-visible:outline-none"
+                        >
+                          <span className="w-8 h-8 rounded-lg bg-secondary/10 dark:bg-secondary-fixed/10 flex items-center justify-center shrink-0">
+                            <Icon name="forum" size="text-lg" className="text-secondary dark:text-secondary-fixed" />
                           </span>
-                        </div>
-                      </Link>
+                          <div>
+                            <span className="font-semibold block">{t("forum")}</span>
+                            <span className="text-xs text-on-surface-variant/70 dark:text-tertiary-fixed-dim/70">
+                              {language === "en" ? "Share & discuss" : "Chia sẻ & thảo luận"}
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                   {navLink}
