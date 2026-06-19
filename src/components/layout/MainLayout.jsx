@@ -7,7 +7,7 @@ import ReadingMarkOverlay from "./ReadingMarkOverlay";
 import Header from "./Header";
 import Footer from "./Footer";
 import ChatbotPanel from "../chatbot/ChatbotPanel";
-import { firebaseConfigError, isFirebaseConfigured } from "../../firebase";
+import { firebaseConfigError, isFirebaseConfigured } from "../../services/firebase";
 
 /**
  * MainLayout — Shell component wrapping all pages
