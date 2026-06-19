@@ -13,8 +13,29 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+const requiredFirebaseKeys = [
+  "apiKey",
+  "authDomain",
+  "projectId",
+  "appId"
+];
+
+const missingFirebaseKeys = requiredFirebaseKeys.filter((key) => !firebaseConfig[key]);
+
+export const isFirebaseConfigured = missingFirebaseKeys.length === 0;
+export const firebaseConfigError = isFirebaseConfigured
+  ? ""
+  : "Thiếu cấu hình Firebase. Vui lòng tạo file .env dựa trên .env.example để chạy đầy đủ tính năng.";
+
+if (!isFirebaseConfigured) {
+  console.warn(
+    "[Firebase] Missing required config:",
+    missingFirebaseKeys.join(", ")
+  );
+}
+
+const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
+export const analytics = app ? getAnalytics(app) : null;
 export default app;

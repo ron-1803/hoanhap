@@ -7,6 +7,7 @@ import ReadingMarkOverlay from "./ReadingMarkOverlay";
 import Header from "./Header";
 import Footer from "./Footer";
 import ChatbotPanel from "../chatbot/ChatbotPanel";
+import { firebaseConfigError, isFirebaseConfigured } from "../../firebase";
 
 /**
  * MainLayout — Shell component wrapping all pages
@@ -83,6 +84,15 @@ export default function MainLayout() {
 
         {/* Sticky header with navigation */}
         <Header />
+
+        {!isFirebaseConfigured && (
+          <div
+            role="status"
+            className="mx-4 mt-4 rounded-lg border-2 border-amber-500 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-950 shadow-sm md:mx-margin-desktop dark:border-amber-300 dark:bg-amber-950 dark:text-amber-50"
+          >
+            {firebaseConfigError} Các trang nội dung tĩnh vẫn có thể xem, nhưng đăng nhập và dữ liệu trực tuyến sẽ tạm thời không hoạt động.
+          </div>
+        )}
 
         {/* Page content rendered by React Router */}
         <main

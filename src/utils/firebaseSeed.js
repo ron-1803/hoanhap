@@ -1,4 +1,4 @@
-import { db, auth } from "../firebase";
+import { db, auth, isFirebaseConfigured } from "../firebase";
 import { 
   collection, 
   getDocs, 
@@ -50,6 +50,11 @@ async function seedAdminUser() {
 
 // Hàm seed chung cho các collection Firestore
 export async function seedDatabase() {
+  if (!isFirebaseConfigured || !db || !auth) {
+    console.warn("[Firebase] Database seeding skipped because Firebase is not configured.");
+    return;
+  }
+
   try {
     // 1. Seed Admin User
     await seedAdminUser();

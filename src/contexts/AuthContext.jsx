@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAccessibility } from "./AccessibilityContext";
-import { auth, db } from "../firebase";
+import { auth, db, firebaseConfigError, isFirebaseConfigured } from "../firebase";
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
@@ -19,6 +19,8 @@ import { seedDatabase } from "../utils/firebaseSeed";
    ═══════════════════════════════════════════════════════════════════ */
 
 const AuthContext = createContext(null);
+const firebaseUnavailableMessage =
+  firebaseConfigError || "Firebase chưa được cấu hình. Vui lòng kiểm tra file .env.";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -28,6 +30,8 @@ export function AuthProvider({ children }) {
 
   // Run database seeding on start, then initialize active user session
   useEffect(() => {
+    if (!isFirebaseConfigured) return;
+
     const initDb = async () => {
       await seedDatabase();
     };
@@ -36,6 +40,13 @@ export function AuthProvider({ children }) {
 
   // Listen for Firebase Auth state changes
   useEffect(() => {
+    if (!isFirebaseConfigured || !auth || !db) {
+      setUser(null);
+      setLoading(false);
+      setError(firebaseUnavailableMessage);
+      return undefined;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
         if (firebaseUser) {
@@ -68,6 +79,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
+      if (!isFirebaseConfigured || !auth || !db) {
+        throw new Error(firebaseUnavailableMessage);
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
 
@@ -110,6 +125,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
+      if (!isFirebaseConfigured || !auth || !db) {
+        throw new Error(firebaseUnavailableMessage);
+      }
+
       const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
       const firebaseUser = userCredential.user;
 
@@ -148,6 +167,12 @@ export function AuthProvider({ children }) {
   // ── Logout ───────────────────────────────────────────────────────
   const logout = useCallback(async () => {
     try {
+      if (!isFirebaseConfigured || !auth) {
+        setUser(null);
+        speakText("Đã đăng xuất khỏi phiên cục bộ.");
+        return;
+      }
+
       await signOut(auth);
       setUser(null);
       speakText("Đã đăng xuất khỏi hệ thống.");
@@ -162,6 +187,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
+      if (!isFirebaseConfigured || !db) {
+        throw new Error(firebaseUnavailableMessage);
+      }
+
       const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, updatedData);
 
@@ -211,6 +240,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
+      if (!isFirebaseConfigured || !auth) {
+        throw new Error(firebaseUnavailableMessage);
+      }
+
       await sendPasswordResetEmail(auth, email);
       speakText("Yêu cầu đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra email.");
       return true;
@@ -237,6 +270,8 @@ export function AuthProvider({ children }) {
     updateProfile,
     toggleSaveBenefit,
     resetPassword,
+    isFirebaseConfigured,
+    firebaseConfigError,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
