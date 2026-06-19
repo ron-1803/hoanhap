@@ -265,7 +265,8 @@ export default function Header() {
                       id="connection-dropdown-menu"
                       role="menu"
                       aria-label={language === "en" ? "Connection sub-menu" : "Menu con Kết nối"}
-                      className={`absolute left-0 top-full mt-1.5 w-60 glass-card rounded-xl shadow-xl py-1.5 z-50
+                      className={`absolute left-0 top-full mt-1.5 w-60 rounded-xl shadow-xl py-1.5 z-50
+                        bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
                         transition-all duration-200 ease-out origin-top
                         ${connectionOpen
                           ? "opacity-100 visible scale-100 translate-y-0"
@@ -351,8 +352,8 @@ export default function Header() {
 
             {langOpen && (
               <div
-                className="absolute right-0 mt-2 w-48 glass-card
-                           rounded-xl shadow-lg py-2 z-50
+                className="absolute right-0 mt-2 w-48 rounded-xl shadow-xl py-2 z-50
+                           bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
                            animate-[slideUp_0.15s_ease-out]"
                 role="menu"
                 aria-label="Menu chọn ngôn ngữ"
@@ -416,8 +417,8 @@ export default function Header() {
 
             {notifOpen && (
               <div
-                className="absolute right-0 mt-2 w-80 glass-card
-                           rounded-2xl shadow-xl py-2 z-50
+                className="absolute right-0 mt-2 w-80 rounded-2xl shadow-xl py-2 z-50
+                           bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
                            animate-[slideUp_0.15s_ease-out]"
                 role="menu"
                 aria-label="Bảng thông báo"
@@ -489,8 +490,8 @@ export default function Header() {
 
               {profileOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-56 glass-card
-                             rounded-xl shadow-lg py-2 z-50
+                  className="absolute right-0 mt-2 w-56 rounded-xl shadow-xl py-2 z-50
+                             bg-white dark:bg-[#1c1f26] border border-outline-variant/40 dark:border-white/10
                              animate-[slideUp_0.15s_ease-out]"
                   role="menu"
                   aria-label="Menu tài khoản cá nhân"
